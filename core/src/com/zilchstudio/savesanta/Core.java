@@ -2,16 +2,15 @@ package com.zilchstudio.savesanta;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -26,6 +25,8 @@ public class Core extends ApplicationAdapter {
 
     World<Entity> world;
     Player dino;
+    Vector2 dinoPosition = new Vector2();
+    Vector2 cameraPosition = new Vector2();
 
     @Override
     public void create () {
@@ -33,9 +34,9 @@ public class Core extends ApplicationAdapter {
         stage = new Stage( viewport );
 
         float tileSize = 24f;
-        float tile2px = 1f / 5f;
+        float tile2px = 1f / 4.8f;
 
-        world = new World<Entity>( tileSize * tile2px );
+        world = new World<Entity>( 5f );
 
         tiledMap = new TmxMapLoader().load("save-santa.tmx");
 
@@ -76,7 +77,6 @@ public class Core extends ApplicationAdapter {
         ScreenUtils.clear( Color.BLACK );
 
         
-
         tiledMapRenderer.setView( (OrthographicCamera) stage.getCamera() );
         tiledMapRenderer.render();
 
@@ -84,7 +84,10 @@ public class Core extends ApplicationAdapter {
         stage.draw();
 
         if( dino != null )
-            stage.getCamera().position.set( dino.x, dino.y, 0 );
+            dinoPosition.set( dino.x + ( dino.sub.x < 0 ? -10f : 10f ), dino.y );
+        
+        cameraPosition.set( MathUtils.lerp( stage.getCamera().position.x, dinoPosition.x, Gdx.graphics.getDeltaTime() * 2f), dinoPosition.y );
+        stage.getCamera().position.set( cameraPosition.x, cameraPosition.y, 0 );
 
     }
 

@@ -41,7 +41,7 @@ public class Player extends Actor implements Entity {
 
     float velocityX = 0;
     float velocityY = 0;
-    final float GRAVITY = -5f;
+    final float GRAVITY = -3f;
     float belowGround = 60f;
     float life = 3;
 
@@ -50,6 +50,7 @@ public class Player extends Actor implements Entity {
     boolean hitGround = false;
     boolean flip = false;
     
+    String gameOvermsg = "Game Over";
 
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
@@ -98,7 +99,7 @@ public class Player extends Actor implements Entity {
             flip = false;
         }
         if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
-            velocityY = 2f;
+            velocityY = 1.5f;
         }
 
         velocityY += GRAVITY * delta;
@@ -128,15 +129,18 @@ public class Player extends Actor implements Entity {
             takenHit = false;
         }
 
-        if( y <= belowGround && hitGround )
+        if( y <= belowGround && hitGround ) {
             instantDeath();
+            gameOvermsg = "You hit the ground too hard.";   
+        }
+
     }
 
     float centerX, centerY;
     Vector3 touchPoint = new Vector3();
     Vector2 touchPointV2 = new Vector2();
     float angleDeg = 0f;
-    Vector2 sub = new Vector2();
+    public Vector2 sub = new Vector2();
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {
@@ -157,7 +161,6 @@ public class Player extends Actor implements Entity {
         touchPoint = getParent().getStage().getCamera().unproject( touchPoint );
 
         sub = touchPointV2.set( touchPoint.x, touchPoint.y ).sub( centerX, centerY );
-        System.out.println( sub );
         angleDeg = sub.angleDeg();
 
         batch.draw( renderTexture, sub.x < 0  ? x + 1f + tileSize * tile2px : x - 1f, y - 1f, sub.x < 0  ? - (tileSize * tile2px + 2f) : tileSize * tile2px + 2f, tileSize * tile2px + 2f );

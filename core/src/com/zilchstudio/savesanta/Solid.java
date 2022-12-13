@@ -13,6 +13,8 @@ public class Solid extends Actor implements Entity {
         world.add( item, x, y, tileSize, tileSize );
 
         setBounds( x, y, tileSize, tileSize );
+
+        System.out.println( x + "," + y + ":" + tileSize +","+tileSize );
     }
 
 }
