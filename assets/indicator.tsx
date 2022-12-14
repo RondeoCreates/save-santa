@@ -6,4 +6,9 @@
    <property name="dino" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="1">
+  <properties>
+   <property name="barracks" type="bool" value="true"/>
+  </properties>
+ </tile>
 </tileset>

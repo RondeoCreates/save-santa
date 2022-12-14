@@ -1,6 +1,7 @@
 package com.zilchstudio.savesanta;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -20,11 +21,6 @@ import com.dongbat.jbump.Response.Result;
 
 public class Player extends Actor implements Entity {
 
-    public float x;
-    public float y;
-    public float tile2px = 1f / 5f;
-    public float tileSize = 24f;
-
     TextureAtlas textures;
     Animation<TextureRegion> idle, run, hit;
     TextureRegion renderTexture;
@@ -41,7 +37,7 @@ public class Player extends Actor implements Entity {
 
     float velocityX = 0;
     float velocityY = 0;
-    final float GRAVITY = -3f;
+    final float GRAVITY = -15f;
     float belowGround = 60f;
     float life = 3;
 
@@ -49,6 +45,7 @@ public class Player extends Actor implements Entity {
     boolean hitWall = false;
     boolean hitGround = false;
     boolean flip = false;
+    boolean fastVelocity = false;
     
     String gameOvermsg = "Game Over";
 
@@ -60,12 +57,11 @@ public class Player extends Actor implements Entity {
             return null;
         }
     };
-    
-    public Player( float x, float y, World<Entity> world ) {
-        this.x = x;
-        this.y = y;
-        this.world = world;
 
+    public Player( float x, float y, float size, World<Entity> world ) {
+        this.world = world;
+        
+        setBounds( x, y, size, size );
         textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
 
         idle = new Animation<TextureRegion>( .1f, textures.findRegions( "dino_idle" ), Animation.PlayMode.LOOP );
@@ -73,14 +69,14 @@ public class Player extends Actor implements Entity {
         hit = new Animation<TextureRegion>( .1f, textures.findRegions( "dino_hit" ), Animation.PlayMode.NORMAL );
 
         item = new Item<Entity>( this );
-        world.add( item, x, y, tileSize * tile2px, tileSize * tile2px );
+        world.add( item, x, y, size, size );
 
         weaponTexture = new Texture( Gdx.files.internal( "weapons/mp_40.png" ) );
         weaponRegion.setRegion( weaponTexture );
     }
 
     @Override
-    public void act( float delta ) {
+    public void act(float delta) {
         stateTime += delta;
 
         if( life <= 0 ) {
@@ -91,22 +87,22 @@ public class Player extends Actor implements Entity {
         velocityX = 0;
 
         if( Gdx.input.isKeyPressed( Keys.A ) ) {
-            velocityX = -30 * delta;
+            velocityX = -120 * delta;
             flip = true;
         }
         if( Gdx.input.isKeyPressed( Keys.D ) ) {
-            velocityX = 30 * delta;
+            velocityX = 120 * delta;
             flip = false;
         }
         if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
-            velocityY = 1.5f;
+            velocityY = 8f;
         }
 
         velocityY += GRAVITY * delta;
 
         hitWall = false;
         hitGround = false;
-        result = world.move( item, x + velocityX, y + velocityY, collisionFilter );
+        result = world.move( item, getX() + velocityX, getY() + velocityY, collisionFilter );
         for( int i = 0; i < result.projectedCollisions.size(); i ++ ) {
             collision = result.projectedCollisions.get( i );
             if( collision.other.userData instanceof Solid ) {
@@ -120,20 +116,22 @@ public class Player extends Actor implements Entity {
             }
         }
         rect = world.getRect( item );
-        x = rect.x;
-        y = rect.y;
-
-        setBounds( x, y, tileSize * tile2px, tileSize * tile2px );
+        setPosition( rect.x, rect.y );
 
         if( hit.isAnimationFinished( stateTime ) ) {
             takenHit = false;
         }
 
-        if( y <= belowGround && hitGround ) {
+        
+        if( velocityY < -12 ) {
+            System.out.println( velocityY );
+            fastVelocity = true;
+        }
+
+        if( fastVelocity && hitGround ) {
             instantDeath();
             gameOvermsg = "You hit the ground too hard.";   
         }
-
     }
 
     float centerX, centerY;
@@ -141,11 +139,14 @@ public class Player extends Actor implements Entity {
     Vector2 touchPointV2 = new Vector2();
     float angleDeg = 0f;
     public Vector2 sub = new Vector2();
+    Bullet tempBullet;
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {
         
-        if( velocityX != 0 ) {
+        if( life < 0 ) {
+            renderTexture = hit.getKeyFrame( stateTime );
+        } else if( velocityX != 0 ) {
             renderTexture = run.getKeyFrame( stateTime );
         } else if( takenHit ) {
             renderTexture = hit.getKeyFrame( stateTime );
@@ -153,20 +154,25 @@ public class Player extends Actor implements Entity {
             renderTexture = idle.getKeyFrame( stateTime );
         }
 
-        centerX = x + ( tileSize * tile2px ) / 2;
-        centerY = y + ( tileSize * tile2px ) / 2;
-
+        centerX = getX() + getWidth() / 2;
+        centerY = getY() + getHeight() / 2;
         touchPoint.set( Gdx.input.getX(), Gdx.input.getY(), 0 );
-
         touchPoint = getParent().getStage().getCamera().unproject( touchPoint );
-
         sub = touchPointV2.set( touchPoint.x, touchPoint.y ).sub( centerX, centerY );
         angleDeg = sub.angleDeg();
 
-        batch.draw( renderTexture, sub.x < 0  ? x + 1f + tileSize * tile2px : x - 1f, y - 1f, sub.x < 0  ? - (tileSize * tile2px + 2f) : tileSize * tile2px + 2f, tileSize * tile2px + 2f );
+        batch.draw( renderTexture, sub.x < 0  ? getX() + 5f + getWidth() : getX() - 5f, getY() - 5f, sub.x < 0  ? - (getWidth() + 10f) : getWidth() + 10f, getHeight() + 10f );
 
         if( !takenHit )
-            batch.draw( weaponRegion, centerX, centerY, 0, - weaponRegion.getRegionHeight() * .1f, weaponRegion.getRegionWidth(), sub.x < 0 ? - weaponRegion.getRegionHeight() : weaponRegion.getRegionHeight(), .15f, .15f, angleDeg );
+            batch.draw( weaponRegion, centerX, centerY - 11f, 0, 0, weaponRegion.getRegionWidth(), sub.x < 0 ? - weaponRegion.getRegionHeight() : weaponRegion.getRegionHeight(), .7f, .7f, angleDeg );
+        
+        if( life <= 0 )
+            return;
+
+        if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
+            tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
+            getStage().addActor( tempBullet );
+        }
     }
 
     public void takeHit() {
@@ -181,5 +187,4 @@ public class Player extends Actor implements Entity {
         takeHit();
         life = 0;
     }
-
 }
