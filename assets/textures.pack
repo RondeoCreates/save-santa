@@ -1,320 +1,390 @@
 
 textures.png
-size: 1024, 64
+size: 2048, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 dino_hit
   rotate: false
-  xy: 54, 2
+  xy: 1472, 214
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 4
 dino_hit
   rotate: false
-  xy: 106, 2
+  xy: 1498, 214
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 1
 dino_hit
   rotate: false
-  xy: 158, 2
+  xy: 1524, 214
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 6
 dino_hit
   rotate: false
-  xy: 262, 2
+  xy: 1576, 214
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 5
 dino_hit
   rotate: false
-  xy: 340, 2
+  xy: 330, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 2
 dino_idle
   rotate: false
-  xy: 28, 2
+  xy: 174, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 3
 dino_hit
   rotate: false
-  xy: 28, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 0
-dino_hit
-  rotate: false
-  xy: 28, 2
+  xy: 174, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 3
-dino_idle
+dino_hit
   rotate: false
-  xy: 28, 2
+  xy: 174, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 0
 dino_idle
   rotate: false
-  xy: 184, 2
+  xy: 174, 84
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 0
+dino_idle
+  rotate: false
+  xy: 252, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 2
 dino_idle
   rotate: false
-  xy: 288, 2
+  xy: 304, 84
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 1
 dino_run
+  rotate: false
+  xy: 1446, 214
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 1
+dino_run
+  rotate: false
+  xy: 200, 84
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 3
+dino_run
+  rotate: false
+  xy: 226, 84
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 0
+dino_run
+  rotate: false
+  xy: 1550, 214
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 5
+dino_run
+  rotate: false
+  xy: 278, 84
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 2
+dino_run
+  rotate: false
+  xy: 1602, 214
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 4
+explosion
+  rotate: false
+  xy: 2, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+explosion
+  rotate: false
+  xy: 132, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 6
+explosion
+  rotate: false
+  xy: 262, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 3
+explosion
+  rotate: false
+  xy: 392, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 8
+explosion
+  rotate: false
+  xy: 522, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 0
+explosion
+  rotate: false
+  xy: 652, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 5
+explosion
+  rotate: false
+  xy: 782, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 2
+explosion
+  rotate: false
+  xy: 912, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 7
+explosion
+  rotate: false
+  xy: 1042, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 4
+explosion
+  rotate: false
+  xy: 1172, 110
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 9
+pig_attack
+  rotate: false
+  xy: 74, 10
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 1
+pig_attack
+  rotate: false
+  xy: 110, 46
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 3
+pig_attack
+  rotate: false
+  xy: 146, 82
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 0
+pig_attack
+  rotate: false
+  xy: 1374, 140
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 2
+pig_attack
+  rotate: false
+  xy: 1410, 176
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 4
+pig_dead
   rotate: false
   xy: 2, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 1
-dino_run
-  rotate: false
-  xy: 80, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 3
-dino_run
-  rotate: false
-  xy: 132, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 0
-dino_run
-  rotate: false
-  xy: 210, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 5
-dino_run
-  rotate: false
-  xy: 236, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 2
-dino_run
-  rotate: false
-  xy: 314, 2
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 4
-pig_attack
-  rotate: false
-  xy: 650, 36
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 1
-pig_attack
-  rotate: false
-  xy: 678, 36
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 3
-pig_attack
-  rotate: false
-  xy: 706, 36
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 0
-pig_attack
-  rotate: false
-  xy: 734, 36
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 2
-pig_attack
-  rotate: false
-  xy: 762, 36
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 4
-pig_dead
-  rotate: false
-  xy: 2, 28
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 2
-pig_dead
-  rotate: false
-  xy: 254, 28
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_dead
   rotate: false
-  xy: 362, 28
+  xy: 1302, 132
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 3
 pig_dead
   rotate: false
-  xy: 506, 28
+  xy: 74, 38
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
+pig_dead
+  rotate: false
+  xy: 1410, 204
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 2
 pig_hit
   rotate: false
-  xy: 146, 28
+  xy: 38, 74
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_hit
   rotate: false
-  xy: 398, 28
+  xy: 1338, 168
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
 pig_idle
   rotate: false
-  xy: 74, 28
+  xy: 1302, 204
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 7
 pig_idle
   rotate: false
-  xy: 110, 28
+  xy: 2, 38
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 4
 pig_idle
   rotate: false
-  xy: 110, 28
+  xy: 2, 38
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 0
+pig_idle
+  rotate: false
+  xy: 2, 38
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 1
+pig_idle
+  rotate: false
+  xy: 2, 38
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 3
+pig_idle
+  rotate: false
+  xy: 2, 38
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 2
+pig_idle
+  rotate: false
+  xy: 2, 38
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 5
 pig_idle
   rotate: false
-  xy: 110, 28
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 3
-pig_idle
-  rotate: false
-  xy: 110, 28
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 2
-pig_idle
-  rotate: false
-  xy: 110, 28
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 1
-pig_idle
-  rotate: false
-  xy: 110, 28
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 0
-pig_idle
-  rotate: false
-  xy: 182, 28
+  xy: 1302, 168
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 9
 pig_idle
   rotate: false
-  xy: 290, 28
+  xy: 38, 38
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 6
 pig_idle
   rotate: false
-  xy: 434, 28
+  xy: 38, 2
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 8
 pig_idle
   rotate: false
-  xy: 578, 28
+  xy: 1338, 132
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 10
 pig_run
   rotate: false
-  xy: 38, 28
+  xy: 2, 74
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 2
 pig_run
   rotate: false
-  xy: 218, 28
+  xy: 1338, 204
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 4
 pig_run
   rotate: false
-  xy: 326, 28
+  xy: 74, 74
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_run
   rotate: false
-  xy: 470, 28
+  xy: 1374, 204
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 3
 pig_run
   rotate: false
-  xy: 542, 28
+  xy: 110, 74
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
 pig_run
   rotate: false
-  xy: 614, 28
+  xy: 1374, 168
   size: 34, 34
   orig: 34, 34
   offset: 0, 0

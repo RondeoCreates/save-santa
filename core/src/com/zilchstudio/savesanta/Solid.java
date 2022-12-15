@@ -17,4 +17,11 @@ public class Solid extends Actor implements Entity {
         //System.out.println( x + "," + y + ":" + tileSize +","+tileSize );
     }
 
+    boolean disposed = false;
+    @Override
+    public void dispose() {
+        disposed = true;
+        
+    }
+
 }

@@ -1,12 +1,14 @@
 package com.zilchstudio.savesanta;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.dongbat.jbump.Collision;
 import com.dongbat.jbump.CollisionFilter;
@@ -21,16 +23,16 @@ public class Enemy extends Actor implements Entity {
     TextureAtlas textures;
     Animation<TextureRegion> idle, run, hit, attack, dead;
     TextureRegion renderTexture;
-    Texture weaponTexture;
-    TextureRegion weaponRegion = new TextureRegion();
 
     float stateTime = 0f;
+    long time = 0;
 
     World<Entity> world;
     Item<Entity> item;
     Rect rect;
     Result result;
     Collision collision;
+    Random random = new Random();
 
     float velocityX = 0;
     float velocityY = 0;
@@ -43,6 +45,7 @@ public class Enemy extends Actor implements Entity {
     boolean hitGround = false;
     boolean flip = false;
     boolean isDead = false;
+    boolean isAttacking = false;
 
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
@@ -52,6 +55,17 @@ public class Enemy extends Actor implements Entity {
             return null;
         }
     };
+
+    CollisionFilter playerSensor = new CollisionFilter() {
+        public Response filter(Item item, Item other) {
+            if( item.userData instanceof Player )
+                return Response.slide;
+            return null;
+        };
+    };
+    ArrayList<Item> items = new ArrayList<>();
+    Player tempPlayer;
+    Vector2 playerPosition = new Vector2();
 
     public Enemy( float x, float y, float size, World<Entity> world ) {
         this.world = world;
@@ -67,14 +81,15 @@ public class Enemy extends Actor implements Entity {
 
         item = new Item<Entity>( this );
         world.add( item, x, y, size, size );
-
-        weaponTexture = new Texture( Gdx.files.internal( "weapons/mp_40.png" ) );
-        weaponRegion.setRegion( weaponTexture );
     }
 
     @Override
     public void act(float delta) {
+        if( disposed )
+            return;
+
         stateTime += delta;
+        time ++;
 
         if( life <= 0 ) {
             life = 0;
@@ -90,6 +105,8 @@ public class Enemy extends Actor implements Entity {
         }
 
         velocityX = 0;
+
+        //velocityX = random.nextBoolean() ? 1 : -1;
 
         /*if( Gdx.input.isKeyPressed( Keys.A ) ) {
             velocityX = -120 * delta;
@@ -127,17 +144,37 @@ public class Enemy extends Actor implements Entity {
             takenHit = false;
         }
 
+        if( time % 100 == 0 && !isAttacking ) {
+            world.queryRect( getX() + (getWidth()/2) - 250f, getY() + (getHeight()/2) - 250f, 500f, 500f, playerSensor, items );
+            if( items.size() > 0  ) {
+                isAttacking = true;
+                stateTime = 0;
+                tempPlayer = (Player) items.get( 0 ).userData;
+                playerPosition.set( tempPlayer.getX(), tempPlayer.getY() );
+                getStage().addActor( new Bomb( new Vector2( getX() + getWidth()/2, getY() + getHeight()/2 ), playerPosition, 24f, world ) );
+            }
+            
+        }
+
+        if( attack.isAnimationFinished( stateTime ) ) {
+            isAttacking = false;
+        }
+
     }
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {
+        if( disposed )
+            return;
         
         if( isDead ) {
             renderTexture = dead.getKeyFrame( stateTime );
-        } else if( velocityX != 0 ) {
-            renderTexture = run.getKeyFrame( stateTime );
         } else if( takenHit ) {
             renderTexture = hit.getKeyFrame( stateTime );
+        } else if( isAttacking ) {
+            renderTexture = attack.getKeyFrame( stateTime );
+        } else if( velocityX != 0 ) {
+            renderTexture = run.getKeyFrame( stateTime );
         } else {
             renderTexture = idle.getKeyFrame( stateTime );
         }
@@ -156,5 +193,13 @@ public class Enemy extends Actor implements Entity {
     public void instantDeath() {
         takeHit();
         life = 0;
+    }
+
+    boolean disposed = false;
+    @Override
+    public void dispose() {
+        disposed = true;
+        
+        textures.dispose();
     }
 }

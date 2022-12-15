@@ -39,6 +39,9 @@ public class Barracks extends Actor implements Entity {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if( disposed )
+            return;
+
         if( isDead ) {
             region.setRegion( dead );
         } else if( takeHit ) {
@@ -54,6 +57,8 @@ public class Barracks extends Actor implements Entity {
 
     @Override
     public void act(float delta) {
+        if( disposed )
+            return;
 
         if( life <= 0 )
             isDead = true;
@@ -77,6 +82,16 @@ public class Barracks extends Actor implements Entity {
     public void takeHit() {
         life --;
         takeHit = true;
+    }
+
+    boolean disposed = false;
+    @Override
+    public void dispose() {
+        disposed = true;
+        
+        healthy.dispose();
+        hit.dispose();
+        dead.dispose();
     }
     
 }

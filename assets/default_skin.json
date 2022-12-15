@@ -1,0 +1,59 @@
+{
+BitmapFont: {
+	caviardreams: {
+		file: caviardreams.fnt
+	}
+	F04b: {
+		file: F04b.fnt
+	}
+}
+Color: {
+	blue: {
+		r: 0.003921569
+		g: 0.25490198
+		b: 0.40392157
+		a: 1
+	}
+	RGBA_255_255_255_255: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+	RGBA_63_169_242_255: {
+		r: 0.24705882
+		g: 0.6627451
+		b: 0.9490196
+		a: 1
+	}
+}
+ButtonStyle: {
+	default: {
+		up: blue
+		down: blue_tinted
+	}
+}
+LabelStyle: {
+	default: {
+		font: caviardreams
+		fontColor: RGBA_255_255_255_255
+	}
+	Big: {
+		font: F04b
+		fontColor: RGBA_255_255_255_255
+	}
+}
+TextButtonStyle: {
+	default: {
+		font: caviardreams
+		fontColor: RGBA_255_255_255_255
+		up: blue
+		down: blue_tinted
+	}
+}
+TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}

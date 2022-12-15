@@ -37,13 +37,16 @@ public class Bullet extends Actor implements Entity {
                 if( ((Barracks) other.userData ).isDead )
                     return null;
                 ((Barracks) other.userData ).takeHit();
+                Rumble.rumble( 1f, .5f );
             }
             if( other.userData instanceof Enemy ) {
                 ((Enemy) other.userData ).takeHit();
+                Rumble.rumble( 1f, .5f );
             }
 
-            if( !(other.userData instanceof Player) )
+            if( !(other.userData instanceof Player) && !(other.userData instanceof Bomb) )
                 dead = true;
+
             return null;
         }
         
@@ -65,6 +68,9 @@ public class Bullet extends Actor implements Entity {
 
     @Override
     public void act(float delta) {
+        if( disposed )
+            return;
+
         if( dead ) {
             world.remove( item );
             remove();
@@ -75,17 +81,28 @@ public class Bullet extends Actor implements Entity {
             return;
         }
 
-        world.move( item, getX() + ( direction.x * 400f ) * delta, getY() + ( direction.y * 400f ) * delta, filter );
+        world.move( item, getX() + ( direction.x * 1200f ) * delta, getY() + ( direction.y * 1200f ) * delta, filter );
         rect = world.getRect( item );
         setPosition( rect.x, rect.y );
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if( disposed )
+            return;
+
         if( dead )
             return;
         //batch.draw( texture, getX() - 10f, getY() - 10f, getWidth() + 20f, getHeight() + 20f );
-        batch.draw( textureRegion, getX() - 10f, getY() - 10f, (getWidth() + 20f) / 2, (getHeight() + 20f) / 2, getWidth() + 20f, getHeight() + 20f, 1f, 1f, direction.angleDeg() );
+        batch.draw( textureRegion, getX() - 1f, getY() - 1f, (getWidth() + 2f) / 2, (getHeight() + 2f) / 2, getWidth() + 2f, getHeight() + 2f, 1f, 1f, direction.angleDeg() );
+    }
+
+    boolean disposed = false;
+    @Override
+    public void dispose() {
+        disposed = true;
+        
+        texture.dispose();
     }
 
 }

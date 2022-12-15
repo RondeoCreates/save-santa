@@ -1,18 +1,15 @@
 package com.zilchstudio.savesanta;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.dongbat.jbump.Collision;
 import com.dongbat.jbump.CollisionFilter;
@@ -22,37 +19,35 @@ import com.dongbat.jbump.Response;
 import com.dongbat.jbump.World;
 import com.dongbat.jbump.Response.Result;
 
-public class Player extends Actor implements Entity {
+public class Enemy extends Actor implements Entity {
 
     TextureAtlas textures;
-    Animation<TextureRegion> idle, run, hit;
+    Animation<TextureRegion> idle, run, hit, attack, dead;
     TextureRegion renderTexture;
-    Texture weaponTexture;
-    TextureRegion weaponRegion = new TextureRegion();
-    Random random = new Random();
 
     float stateTime = 0f;
+    long time = 0;
 
     World<Entity> world;
     Item<Entity> item;
     Rect rect;
     Result result;
     Collision collision;
+    Random random = new Random();
+    Rectangle playerSensor = new Rectangle();
 
     float velocityX = 0;
     float velocityY = 0;
     final float GRAVITY = -15f;
     float belowGround = 60f;
-    float life = 5;
+    float life = 3;
 
     boolean takenHit = false;
     boolean hitWall = false;
     boolean hitGround = false;
     boolean flip = false;
-    boolean fastVelocity = false;
-    boolean fire = false;
-    
-    
+    boolean isDead = false;
+    boolean isAttacking = false;
 
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
@@ -62,40 +57,48 @@ public class Player extends Actor implements Entity {
             return null;
         }
     };
+    
+    Vector2 playerPosition = new Vector2();
 
-    public Player( float x, float y, float size, World<Entity> world ) {
+    public Enemy( float x, float y, float size, World<Entity> world ) {
         this.world = world;
         
         setBounds( x, y, size, size );
         textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
 
-        idle = new Animation<TextureRegion>( .1f, textures.findRegions( "dino_idle" ), Animation.PlayMode.LOOP );
-        run = new Animation<TextureRegion>( .1f, textures.findRegions( "dino_run" ), Animation.PlayMode.LOOP );
-        hit = new Animation<TextureRegion>( .1f, textures.findRegions( "dino_hit" ), Animation.PlayMode.NORMAL );
+        idle = new Animation<TextureRegion>( .1f, textures.findRegions( "pig_idle" ), Animation.PlayMode.LOOP );
+        run = new Animation<TextureRegion>( .1f, textures.findRegions( "pig_run" ), Animation.PlayMode.LOOP );
+        hit = new Animation<TextureRegion>( .1f, textures.findRegions( "pig_hit" ), Animation.PlayMode.NORMAL );
+        attack = new Animation<TextureRegion>( .1f, textures.findRegions( "pig_attack" ), Animation.PlayMode.NORMAL );
+        dead = new Animation<TextureRegion>( .1f, textures.findRegions( "pig_dead" ), Animation.PlayMode.NORMAL );
 
         item = new Item<Entity>( this );
         world.add( item, x, y, size, size );
-
-        weaponTexture = new Texture( Gdx.files.internal( "weapons/ak47.png" ) );
-        weaponRegion.setRegion( weaponTexture );
     }
 
     @Override
     public void act(float delta) {
-        if( disposed )
-            return;
-
         stateTime += delta;
         time ++;
 
         if( life <= 0 ) {
             life = 0;
+            isDead = true;
+
+            if( dead.isAnimationFinished( stateTime ) ) {
+                world.remove( item );
+                remove();
+                textures.dispose();
+            }
+
             return;
         }
 
         velocityX = 0;
 
-        if( Gdx.input.isKeyPressed( Keys.A ) ) {
+        //velocityX = random.nextBoolean() ? 1 : -1;
+
+        /*if( Gdx.input.isKeyPressed( Keys.A ) ) {
             velocityX = -120 * delta;
             flip = true;
         }
@@ -105,7 +108,7 @@ public class Player extends Actor implements Entity {
         }
         if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
             velocityY = 8f;
-        }
+        }*/
 
         velocityY += GRAVITY * delta;
 
@@ -126,71 +129,44 @@ public class Player extends Actor implements Entity {
         }
         rect = world.getRect( item );
         setPosition( rect.x, rect.y );
-        Static.x = getX();
-        Static.y = getY();
 
         if( hit.isAnimationFinished( stateTime ) ) {
             takenHit = false;
         }
 
-        
-        if( velocityY < -12 ) {
-            fastVelocity = true;
+        if( time % 50 == 0 && !isAttacking ) {
+            playerSensor.set( getX() + (getWidth()/2) - 250f, getY() + (getHeight()/2) - 250f, 500f, 500f );
+            if( playerSensor.contains( Static.x, Static.y ) ) {
+                isAttacking = true;
+                stateTime = 0;
+                playerPosition.set( Static.x, Static.y );
+                getStage().addActor( new Bomb( new Vector2( getX() + getWidth()/2, getY() + getHeight()/2 ), playerPosition, 24f, world ) );
+            }
+            
         }
 
-        if( fastVelocity && hitGround ) {
-            instantDeath();
-            Static.gameOvermsg = "You hit the ground too hard.";   
+        if( attack.isAnimationFinished( stateTime ) ) {
+            isAttacking = false;
         }
+
     }
-
-    float centerX, centerY;
-    Vector3 touchPoint = new Vector3();
-    Vector2 touchPointV2 = new Vector2();
-    float angleDeg = 0f;
-    public Vector2 sub = new Vector2();
-    Bullet tempBullet;
-    float recoil = 0f;
-    long time = 0;
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {
-        if( disposed )
-            return;
         
-        if( life < 0 ) {
-            renderTexture = hit.getKeyFrame( stateTime );
-        } else if( velocityX != 0 ) {
-            renderTexture = run.getKeyFrame( stateTime );
+        if( isDead ) {
+            renderTexture = dead.getKeyFrame( stateTime );
         } else if( takenHit ) {
             renderTexture = hit.getKeyFrame( stateTime );
+        } else if( isAttacking ) {
+            renderTexture = attack.getKeyFrame( stateTime );
+        } else if( velocityX != 0 ) {
+            renderTexture = run.getKeyFrame( stateTime );
         } else {
             renderTexture = idle.getKeyFrame( stateTime );
         }
 
-        centerX = getX() + getWidth() / 2;
-        centerY = getY() + getHeight() / 2;
-        touchPoint.set( Gdx.input.getX(), Gdx.input.getY(), 0 );
-        touchPoint = getParent().getStage().getCamera().unproject( touchPoint );
-        sub = touchPointV2.set( touchPoint.x, touchPoint.y ).sub( centerX, centerY );
-        angleDeg = sub.angleDeg();
-
-        batch.draw( renderTexture, sub.x < 0  ? getX() + 5f + getWidth() : getX() - 5f, getY() - 5f, sub.x < 0  ? - (getWidth() + 10f) : getWidth() + 10f, getHeight() + 10f );
-
-        if( !takenHit ) {
-            recoil = fire ? random.nextFloat() * 4f : 0;
-            batch.draw( weaponRegion, centerX + MathUtils.lerp( 0, recoil, Gdx.graphics.getDeltaTime() * 100f ), centerY - 11f, 0, 0, weaponRegion.getRegionWidth(), sub.x < 0 ? - weaponRegion.getRegionHeight() : weaponRegion.getRegionHeight(), .4f, .4f, angleDeg );
-        }
-
-        if( life <= 0 )
-            return;
-
-        fire = false;
-        if( Gdx.input.isButtonPressed( Buttons.LEFT ) && time % 8 == 0 ) {
-            tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
-            getStage().addActor( tempBullet );
-            fire = true;
-        }
+        batch.draw( renderTexture, !flip ? getX() + 10f + getWidth() : getX() - 10f, getY(), !flip ? - (getWidth() + 20f) : getWidth() + 20f, getHeight() + 20f );
     }
 
     public void takeHit() {
@@ -204,14 +180,5 @@ public class Player extends Actor implements Entity {
     public void instantDeath() {
         takeHit();
         life = 0;
-    }
-
-    boolean disposed = false;
-    @Override
-    public void dispose() {
-        disposed = true;
-        
-        textures.dispose();
-        weaponTexture.dispose();
     }
 }
