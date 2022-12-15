@@ -2,10 +2,14 @@ package com.zilchstudio.savesanta;
 
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Pixmap;
 
 
 /**
  * Free assets
+ * https://pixelfrog-assets.itch.io/kings-and-pigs
  * https://elthen.itch.io/2d-pixel-art-santa-sprites
  * https://vnitti.itch.io/glacial-mountains-parallax-background
  * https://blackdragon1727.itch.io/free-trap-platformer
@@ -20,10 +24,21 @@ import com.badlogic.gdx.Game;
  * https://github.com/raeleus/Particle-Park
  */
 public class Core extends Game {
+
+    Music bgm;
     
     @Override
     public void create() {
+        Pixmap pm = new Pixmap( Gdx.files.internal("crosshair.png") );
+        Gdx.graphics.setCursor( Gdx.graphics.newCursor(pm, 16, 16 ) );
+        pm.dispose();
+
         setScreen( new StartScreen( this ) );
+
+        bgm = Gdx.audio.newMusic( Gdx.files.internal( "bgm.wav" ) );
+        bgm.setLooping( true );
+        bgm.setVolume( .3f );
+        bgm.play();
     }
 
     @Override
@@ -33,6 +48,12 @@ public class Core extends Game {
 
     @Override
     public void resize(int width, int height) {
-       
+       super.resize( width, height );
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        bgm.dispose();
     }
 }

@@ -146,7 +146,7 @@ public class Enemy extends Actor implements Entity {
 
         if( time % 100 == 0 && !isAttacking ) {
             world.queryRect( getX() + (getWidth()/2) - 250f, getY() + (getHeight()/2) - 250f, 500f, 500f, playerSensor, items );
-            if( items.size() > 0  ) {
+            if( items.size() > 0 ) {
                 isAttacking = true;
                 stateTime = 0;
                 tempPlayer = (Player) items.get( 0 ).userData;

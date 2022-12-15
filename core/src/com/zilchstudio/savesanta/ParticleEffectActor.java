@@ -31,5 +31,9 @@ public class ParticleEffectActor extends Actor {
 
         snowEffect.draw( batch, Gdx.graphics.getDeltaTime() );
     }
+
+    public void dispose() {
+        snowEffect.dispose();
+    }
     
 }

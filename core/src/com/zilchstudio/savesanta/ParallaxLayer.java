@@ -51,5 +51,9 @@ public class ParallaxLayer extends Actor {
         
         batch.draw( region, getX(), getY(), getWidth() * scale, getHeight() );
     }
+
+    public void dispose() {
+        texture.dispose();
+    }
     
 }

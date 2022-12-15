@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -32,6 +33,7 @@ public class Player extends Actor implements Entity {
     Random random = new Random();
 
     float stateTime = 0f;
+    float hitSafe = 3f;
 
     World<Entity> world;
     Item<Entity> item;
@@ -52,7 +54,7 @@ public class Player extends Actor implements Entity {
     boolean fastVelocity = false;
     boolean fire = false;
     
-    
+    Sound gunSound;
 
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
@@ -78,6 +80,8 @@ public class Player extends Actor implements Entity {
 
         weaponTexture = new Texture( Gdx.files.internal( "weapons/ak47.png" ) );
         weaponRegion.setRegion( weaponTexture );
+
+        gunSound = Gdx.audio.newSound( Gdx.files.internal( "cg1.wav" ) );
     }
 
     @Override
@@ -94,17 +98,21 @@ public class Player extends Actor implements Entity {
         }
 
         velocityX = 0;
-
-        if( Gdx.input.isKeyPressed( Keys.A ) ) {
-            velocityX = -120 * delta;
-            flip = true;
-        }
-        if( Gdx.input.isKeyPressed( Keys.D ) ) {
-            velocityX = 120 * delta;
-            flip = false;
-        }
-        if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
-            velocityY = 8f;
+        if( !takenHit ) {
+            if( Gdx.input.isKeyPressed( Keys.A ) ) {
+                velocityX = -120 * delta;
+                flip = true;
+            }
+            if( Gdx.input.isKeyPressed( Keys.D ) ) {
+                velocityX = 120 * delta;
+                flip = false;
+            }
+            if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
+                velocityY = 8f;
+            }
+        } else {
+            velocityX = knockback.x;
+            velocityY = knockback.y;
         }
 
         velocityY += GRAVITY * delta;
@@ -152,6 +160,7 @@ public class Player extends Actor implements Entity {
     Bullet tempBullet;
     float recoil = 0f;
     long time = 0;
+    Vector2 knockback = new Vector2();
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {
@@ -160,10 +169,10 @@ public class Player extends Actor implements Entity {
         
         if( life < 0 ) {
             renderTexture = hit.getKeyFrame( stateTime );
-        } else if( velocityX != 0 ) {
-            renderTexture = run.getKeyFrame( stateTime );
         } else if( takenHit ) {
             renderTexture = hit.getKeyFrame( stateTime );
+        } else if( velocityX != 0 ) {
+            renderTexture = run.getKeyFrame( stateTime );
         } else {
             renderTexture = idle.getKeyFrame( stateTime );
         }
@@ -186,7 +195,8 @@ public class Player extends Actor implements Entity {
             return;
 
         fire = false;
-        if( Gdx.input.isButtonPressed( Buttons.LEFT ) && time % 8 == 0 ) {
+        if( Gdx.input.isButtonPressed( Buttons.LEFT ) && time % 8 == 0 && !takenHit ) {
+            gunSound.play( .6f, random.nextFloat() * 1f + .5f, 0f );
             tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
             getStage().addActor( tempBullet );
             fire = true;
@@ -194,7 +204,7 @@ public class Player extends Actor implements Entity {
     }
 
     public void takeHit() {
-        if( takenHit )
+        if( takenHit || hitSafe >= stateTime )
             return;
         takenHit = true;
         stateTime = 0;
@@ -213,5 +223,7 @@ public class Player extends Actor implements Entity {
         
         textures.dispose();
         weaponTexture.dispose();
+
+        gunSound.dispose();
     }
 }

@@ -7,7 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -36,20 +35,17 @@ public class GameScreen extends ScreenAdapter {
     Vector2 cameraPosition = new Vector2();
 
     ParallaxLayer[] layers;
+    ParticleEffectActor particleEffectActor;
 
     final float TILE_SIZE = 24f;
 
     public GameScreen( Core parent ) {
         this.parent = parent;
-        Static.gameOvermsg = "What a shame!";
+        Static.gameOvermsg = "Christmas is in grave danger";
     }
 
     @Override
     public void show() {
-        Pixmap pm = new Pixmap( Gdx.files.internal("crosshair.png") );
-        Gdx.graphics.setCursor( Gdx.graphics.newCursor(pm, 16, 16 ) );
-        pm.dispose();
-
         stage = new Stage( new ExtendViewport( 600, 300 ) );
         stage.addActor( background = new Group() );
         stage.addActor( middle = new Group() );
@@ -105,7 +101,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Particle Effect
-        foregroundFront.addActor( new ParticleEffectActor() );
+        foregroundFront.addActor( particleEffectActor = new ParticleEffectActor() );
 
         //stage.setDebugAll( true );
         time_limit += TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() );
@@ -156,6 +152,10 @@ public class GameScreen extends ScreenAdapter {
             ((Entity)item.userData).dispose();
             //world.remove( item );
         }
+        for( ParallaxLayer layer : layers ) {
+            layer.dispose();
+        }
+        particleEffectActor.dispose();
     }
     
 }

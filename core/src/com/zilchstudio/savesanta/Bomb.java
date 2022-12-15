@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -22,6 +23,7 @@ import com.dongbat.jbump.Response.Result;
 public class Bomb extends Actor implements Entity {
 
     Vector2 from, to;
+    Vector2 tempVector = new Vector2();
     World<Entity> world;
     Item<Entity> item;
     Rect rect;
@@ -44,11 +46,21 @@ public class Bomb extends Actor implements Entity {
     boolean isDead = false;
     boolean explode = false;
     boolean canHit = true;
+    boolean soundPlaying = false;
+
+    Sound whistle, explodeSound;
 
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
             if( other.userData instanceof Solid ) {
                 explode = true;
+                
+                whistle.stop();
+                if( !soundPlaying ) {
+                    explodeSound.play( .5f, 1f, 0f );
+                    soundPlaying = true;
+                }
+                
                 return Response.slide;
             }
             return null;
@@ -59,6 +71,9 @@ public class Bomb extends Actor implements Entity {
             if( item.userData instanceof Player && canHit  ) {
                 if( ((Player) item.userData).takenHit )
                     return null;
+                tempVector.set( ((Player) item.userData).getX() + ((Player) item.userData).getWidth()/2, ((Player) item.userData).getY() + ((Player) item.userData).getHeight()/2 );
+                tempVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 2f );
+                ((Player) item.userData).knockback.set( tempVector.x, 1f );
                 ((Player) item.userData).takeHit();
                 Rumble.rumble( 4f, .5f );
                 canHit = false;
@@ -83,6 +98,11 @@ public class Bomb extends Actor implements Entity {
 
         textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
         explosion = new Animation<TextureRegion>( .1f, textures.findRegions( "explosion" ), Animation.PlayMode.NORMAL );
+
+        whistle = Gdx.audio.newSound( Gdx.files.internal( "whistle.wav" ) );
+        whistle.play( .4f, 1f, 0f );
+
+        explodeSound = Gdx.audio.newSound( Gdx.files.internal( "explosion.wav" ) );
     }
 
     float bounciness = 7f;
@@ -157,6 +177,8 @@ public class Bomb extends Actor implements Entity {
         
         texture.dispose();
         textures.dispose();
+
+        whistle.dispose();
     }
     
 }
