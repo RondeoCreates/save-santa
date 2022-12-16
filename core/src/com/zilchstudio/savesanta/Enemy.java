@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -47,6 +48,8 @@ public class Enemy extends Actor implements Entity {
     boolean isDead = false;
     boolean isAttacking = false;
 
+    Sound pigSound, dieSound, hitSound;
+
     CollisionFilter collisionFilter = new CollisionFilter() {
         public Response filter(Item item, Item other) {
             if( other.userData instanceof Solid ) {
@@ -81,7 +84,13 @@ public class Enemy extends Actor implements Entity {
 
         item = new Item<Entity>( this );
         world.add( item, x, y, size, size );
+
+        pigSound = Gdx.audio.newSound( Gdx.files.internal( "pig.wav" ) );
+        hitSound = Gdx.audio.newSound( Gdx.files.internal( "pig_hit.wav" ) );
+        dieSound = Gdx.audio.newSound( Gdx.files.internal( "pig_die.wav" ) );
     }
+
+    Vector2 knockback = new Vector2();
 
     @Override
     public void act(float delta) {
@@ -91,7 +100,13 @@ public class Enemy extends Actor implements Entity {
         stateTime += delta;
         time ++;
 
+        velocityX = 0;
+
         if( life <= 0 ) {
+            if( !isDead ) {
+                hitSound.stop();
+                dieSound.play( .2f, 1f, 0f );
+            }
             life = 0;
             isDead = true;
 
@@ -99,12 +114,14 @@ public class Enemy extends Actor implements Entity {
                 world.remove( item );
                 remove();
                 textures.dispose();
+                return;
+            } else {
+                velocityX = knockback.x;
+                velocityY = knockback.y;
             }
 
-            return;
+            
         }
-
-        velocityX = 0;
 
         //velocityX = random.nextBoolean() ? 1 : -1;
 
@@ -146,7 +163,7 @@ public class Enemy extends Actor implements Entity {
 
         if( time % 100 == 0 && !isAttacking ) {
             world.queryRect( getX() + (getWidth()/2) - 250f, getY() + (getHeight()/2) - 250f, 500f, 500f, playerSensor, items );
-            if( items.size() > 0 ) {
+            if( items.size() > 0 && !isAttacking ) {
                 isAttacking = true;
                 stateTime = 0;
                 tempPlayer = (Player) items.get( 0 ).userData;
@@ -185,6 +202,9 @@ public class Enemy extends Actor implements Entity {
     public void takeHit() {
         if( takenHit )
             return;
+        
+        hitSound.stop();
+        hitSound.play();
         takenHit = true;
         stateTime = 0;
         life --;
@@ -201,5 +221,8 @@ public class Enemy extends Actor implements Entity {
         disposed = true;
         
         textures.dispose();
+        pigSound.dispose();
+        hitSound.dispose();
+        dieSound.dispose();
     }
 }

@@ -16,6 +16,7 @@ import com.dongbat.jbump.World;
 public class Bullet extends Actor implements Entity {
     
     Vector2 direction = new Vector2();
+    Vector2 tmpVector = new Vector2();
     Rectangle rectangle = new Rectangle();
     Texture texture;
     TextureRegion textureRegion = new TextureRegion();
@@ -37,11 +38,14 @@ public class Bullet extends Actor implements Entity {
                 if( ((Barracks) other.userData ).isDead )
                     return null;
                 ((Barracks) other.userData ).takeHit();
-                Rumble.rumble( 1f, .5f );
+                Rumble.rumble( 2f, .5f );
             }
             if( other.userData instanceof Enemy ) {
+                tmpVector.set( ((Enemy) other.userData ).getX() + ((Enemy) other.userData ).getWidth()/2 , ((Enemy) other.userData ).getY() + ((Enemy) other.userData ).getHeight()/2 );
+                tmpVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 3f );
+                ((Enemy) other.userData ).knockback.set( tmpVector.x, 1.5f );
                 ((Enemy) other.userData ).takeHit();
-                Rumble.rumble( 1f, .5f );
+                Rumble.rumble( 2f, .5f );
             }
 
             if( !(other.userData instanceof Player) && !(other.userData instanceof Bomb) )

@@ -16,6 +16,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.dongbat.jbump.Item;
@@ -23,6 +29,7 @@ import com.dongbat.jbump.World;
 
 public class GameScreen extends ScreenAdapter {
     Stage stage;
+    Stage hud;
     Group background, middle, foreground, playerGroup, foregroundFront;
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
@@ -38,10 +45,57 @@ public class GameScreen extends ScreenAdapter {
     ParticleEffectActor particleEffectActor;
 
     final float TILE_SIZE = 24f;
+    
+    Table table;
+    Skin skin;
+    Texture heartImage;
+    Texture keyImage;
+    Texture timeImage;
+    Label lifeLabel;
+    Label keyLabel;
+    Label timeLabel;
 
     public GameScreen( Core parent ) {
         this.parent = parent;
         Static.gameOvermsg = "Christmas is in grave danger";
+
+        hud = new Stage( new ExtendViewport( 800, 400 ) );
+
+        table = new Table( skin = new Skin( Gdx.files.internal( "default_skin.json" ) ) );
+        table.setFillParent( true );
+        table.pad( 20f );
+
+        heartImage = new Texture( Gdx.files.internal( "heart_live.png" ) );
+        keyImage = new Texture( Gdx.files.internal( "key.png" ) );
+        timeImage = new Texture( Gdx.files.internal( "time.png" ) );
+
+        LabelStyle style = new LabelStyle( skin.getFont( "F04b" ), Color.WHITE );
+
+        timeLabel = new Label( "00", style );
+        timeLabel.setFontScale( .5f );
+        lifeLabel = new Label( "x 5", style );
+        lifeLabel.setFontScale( .5f );
+        keyLabel = new Label( "x 0", style );
+        keyLabel.setFontScale( .5f );
+
+        table.row();
+        table.add( new Image( timeImage ) );
+        table.add( timeLabel ).align( Align.left ).pad( 10f );
+        
+        table.row();
+        table.add( new Image( heartImage ) );
+        table.add( lifeLabel ).align( Align.left ).pad( 10f );
+        table.add().expandX();
+
+        table.row();
+        table.add( new Image( keyImage ) );
+        table.add( keyLabel ).align( Align.left ).pad( 10f );
+        table.add().expandX();
+
+        table.row();
+        table.add().expandY();
+
+        hud.addActor( table );
     }
 
     @Override
@@ -113,6 +167,9 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         ScreenUtils.clear( Color.BLACK );
 
+        timeLabel.setText( String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) ));
+        lifeLabel.setText( "x " + (int) dino.life );
+
         if( TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) > time_limit ) {
             dino.instantDeath();
             Static.gameOvermsg = "You've ran out of time.";
@@ -120,6 +177,9 @@ public class GameScreen extends ScreenAdapter {
 
         stage.act();
         stage.draw();
+
+        hud.act();
+        hud.draw();
 
         //tiledMapRenderer.setView( (OrthographicCamera) stage.getCamera() );
         //tiledMapRenderer.render();
@@ -156,6 +216,10 @@ public class GameScreen extends ScreenAdapter {
             layer.dispose();
         }
         particleEffectActor.dispose();
+        skin.dispose();
+        heartImage.dispose();
+        keyImage.dispose();
+        timeImage.dispose();
     }
     
 }

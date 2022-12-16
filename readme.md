@@ -19,8 +19,11 @@ Dino Characters https://arks.itch.io/dino-characters
 Guns/Weapons https://0x42-0x4f-0x49.itch.io/pixel-art-weapons
 Explosions https://ansimuz.itch.io/explosion-animations-pack
 Heart icon https://gamedevelopershlok.itch.io/heartpack
+House https://meitdev.itch.io/top-down-house
+Christmas Tree https://vladpenn.itch.io/pixel-holiday-trees
 
 Fonts https://www.dafont.com/
 Particles https://github.com/raeleus/Particle-Park
 Gun SFX https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
+Pig SFX https://opengameart.org/content/farm-animals
 BGM https://opengameart.org/content/merry-x-mas

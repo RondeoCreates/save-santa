@@ -196,7 +196,7 @@ public class Player extends Actor implements Entity {
 
         fire = false;
         if( Gdx.input.isButtonPressed( Buttons.LEFT ) && time % 8 == 0 && !takenHit ) {
-            gunSound.play( .6f, random.nextFloat() * 1f + .5f, 0f );
+            gunSound.play( .3f, random.nextFloat() * 1f + .5f, 0f );
             tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
             getStage().addActor( tempBullet );
             fire = true;

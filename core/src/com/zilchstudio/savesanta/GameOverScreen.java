@@ -33,7 +33,7 @@ public class GameOverScreen extends ScreenAdapter {
         gameOverLabel = new Label( "GAME OVER", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );
         LabelStyle style = new LabelStyle( skin.getFont( "caviardreams" ), Color.WHITE );
         gameOverMsg = new Label( Static.gameOvermsg, style );
-        startAgainLabel = new Label( "Click anywhere to start again", style );
+        startAgainLabel = new Label( "(Click anywhere to start again)", style );
         startAgainLabel.setFontScale( .5f );
 
         table.row();

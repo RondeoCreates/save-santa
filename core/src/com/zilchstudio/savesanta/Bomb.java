@@ -57,7 +57,7 @@ public class Bomb extends Actor implements Entity {
                 
                 whistle.stop();
                 if( !soundPlaying ) {
-                    explodeSound.play( .5f, 1f, 0f );
+                    explodeSound.play( .1f, 1f, 0f );
                     soundPlaying = true;
                 }
                 
@@ -75,7 +75,7 @@ public class Bomb extends Actor implements Entity {
                 tempVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 2f );
                 ((Player) item.userData).knockback.set( tempVector.x, 1f );
                 ((Player) item.userData).takeHit();
-                Rumble.rumble( 4f, .5f );
+                Rumble.rumble( 10f, .5f );
                 canHit = false;
                 return Response.slide;
             }
@@ -100,7 +100,7 @@ public class Bomb extends Actor implements Entity {
         explosion = new Animation<TextureRegion>( .1f, textures.findRegions( "explosion" ), Animation.PlayMode.NORMAL );
 
         whistle = Gdx.audio.newSound( Gdx.files.internal( "whistle.wav" ) );
-        whistle.play( .4f, 1f, 0f );
+        whistle.play( .1f, 1f, 0f );
 
         explodeSound = Gdx.audio.newSound( Gdx.files.internal( "explosion.wav" ) );
     }
