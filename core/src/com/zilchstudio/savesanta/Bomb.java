@@ -33,7 +33,7 @@ public class Bomb extends Actor implements Entity {
     Collision collision;
     Random random = new Random();
     TextureAtlas textures;
-    Animation<TextureRegion> explosion;
+    Animation<TextureRegion> explosion, air_explosion;
     float stateTime;
     ArrayList<Item> items = new ArrayList<>();
 
@@ -47,6 +47,7 @@ public class Bomb extends Actor implements Entity {
     boolean explode = false;
     boolean canHit = true;
     boolean soundPlaying = false;
+    boolean explodeGround = true;
 
     Sound whistle, explodeSound;
 
@@ -57,7 +58,7 @@ public class Bomb extends Actor implements Entity {
                 
                 whistle.stop();
                 if( !soundPlaying ) {
-                    explodeSound.play( .1f, 1f, 0f );
+                    explodeSound.play( .2f,  random.nextFloat() * 2.5f - 0.5f, 0f );
                     soundPlaying = true;
                 }
                 
@@ -69,13 +70,13 @@ public class Bomb extends Actor implements Entity {
     CollisionFilter playerSensor = new CollisionFilter() {
         public Response filter(Item item, Item other) {
             if( item.userData instanceof Player && canHit  ) {
-                if( ((Player) item.userData).takenHit )
+                if( ((Player) item.userData).takenHit || Static.end )
                     return null;
                 tempVector.set( ((Player) item.userData).getX() + ((Player) item.userData).getWidth()/2, ((Player) item.userData).getY() + ((Player) item.userData).getHeight()/2 );
                 tempVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 2f );
                 ((Player) item.userData).knockback.set( tempVector.x, 1f );
                 ((Player) item.userData).takeHit();
-                Rumble.rumble( 10f, .5f );
+                Rumble.rumble( 4f, .5f );
                 canHit = false;
                 return Response.slide;
             }
@@ -98,9 +99,10 @@ public class Bomb extends Actor implements Entity {
 
         textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
         explosion = new Animation<TextureRegion>( .1f, textures.findRegions( "explosion" ), Animation.PlayMode.NORMAL );
+        air_explosion = new Animation<TextureRegion>( .1f, textures.findRegions( "explosion_air" ), Animation.PlayMode.NORMAL );
 
         whistle = Gdx.audio.newSound( Gdx.files.internal( "whistle.wav" ) );
-        whistle.play( .1f, 1f, 0f );
+        whistle.play( .04f, 1f, 0f );
 
         explodeSound = Gdx.audio.newSound( Gdx.files.internal( "explosion.wav" ) );
     }
@@ -131,6 +133,9 @@ public class Bomb extends Actor implements Entity {
 
         velocityY += GRAVITY * delta;
 
+        if( explode )
+            velocityY = 0;
+
         hitWall = false;
         hitGround = false;
         result = world.move( item, explode ? getX() : from.x, getY() + velocityY, collisionFilter );
@@ -139,6 +144,7 @@ public class Bomb extends Actor implements Entity {
             if( collision.other.userData instanceof Solid ) {
                 if( collision.normal.x != 0 ) {
                     hitWall = true;
+                    explodeGround = false;
                 }
                 if( collision.normal.y != 0 && collision.normal.y == 1 ) {
                     hitGround = true;
@@ -149,8 +155,8 @@ public class Bomb extends Actor implements Entity {
         rect = world.getRect( item );
         setPosition( rect.x, rect.y );
 
-        if( explode ) {
-            world.queryRect( getX() - 30f, getY(), getWidth() + 60f, getHeight() + 20f, playerSensor, items );
+        if( explode && explosion.getKeyFrameIndex( stateTime ) > 1 && explosion.getKeyFrameIndex( stateTime ) < 6 ) {
+            world.queryRect( getX() - 25f, getY(), getWidth() + 50f, getHeight() + 20f, playerSensor, items );
         }
     }
 
@@ -163,7 +169,10 @@ public class Bomb extends Actor implements Entity {
             return;
 
         if( explode ) {
-            renderTexture = explosion.getKeyFrame( stateTime );
+            if( explodeGround )
+                renderTexture = explosion.getKeyFrame( stateTime );
+            else
+                renderTexture = air_explosion.getKeyFrame( stateTime );
             batch.draw( renderTexture, getX() - 30f, getY(), getWidth() + 60f, getHeight() + 60f );
             return;
         }

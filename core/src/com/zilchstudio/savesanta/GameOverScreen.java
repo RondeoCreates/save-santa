@@ -5,10 +5,13 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -19,7 +22,7 @@ public class GameOverScreen extends ScreenAdapter {
     Core parent;
     Label gameOverLabel;
     Label gameOverMsg;
-    Label startAgainLabel;
+    TextButton easy, normal, hard;
 
     public GameOverScreen( Core parent ) {
         this.parent = parent;
@@ -33,24 +36,59 @@ public class GameOverScreen extends ScreenAdapter {
         gameOverLabel = new Label( "GAME OVER", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );
         LabelStyle style = new LabelStyle( skin.getFont( "caviardreams" ), Color.WHITE );
         gameOverMsg = new Label( Static.gameOvermsg, style );
-        startAgainLabel = new Label( "(Click anywhere to start again)", style );
-        startAgainLabel.setFontScale( .5f );
+        
+        HorizontalGroup diffHorizontalGroup = new HorizontalGroup();
+        diffHorizontalGroup.space( 5f );
+        easy = new TextButton( "Easy", skin );
+        easy.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 0;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        easy.pad( 5f, 20f, 5f, 20f );
+        easy.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( easy );
+        
+        normal = new TextButton( "Normal", skin );
+        normal.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 1;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        normal.pad( 5f, 20f, 5f, 20f );
+        normal.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( normal );
+
+        hard = new TextButton( "Hard" , skin );
+        hard.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 2;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        hard.pad( 5f, 20f, 5f, 20f );
+        hard.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( hard );
 
         table.row();
-        table.add( gameOverLabel );
+        table.add( gameOverLabel ).pad( 3f );
         
         table.row();
-        table.add( gameOverMsg );
+        table.add( gameOverMsg ).pad( 3f );
 
         table.row();
         table.add().height( 40f );
 
         table.row();
-        table.add( startAgainLabel );
+        table.add( diffHorizontalGroup );
 
         table.setFillParent( true );
 
         stage.addActor( table );
+
+        Gdx.input.setInputProcessor( stage );
     }
 
     @Override
@@ -59,10 +97,6 @@ public class GameOverScreen extends ScreenAdapter {
         
         stage.act();
         stage.draw();
-
-        if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
-            parent.setScreen( new GameScreen( parent ) );
-        }
     }
 
     @Override

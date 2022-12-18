@@ -1,4 +1,4 @@
-Hello Agent Dino. Santa is in need of help. He's been kidnapped by the piggy orcs on the piggy mountain. Without him, christmas won't be as happy as it seems. Please save and free Santa from the hands of the piggy orcs and christmas will be happy again.
+Santa is in need of help. He's been kidnapped by the piggy orcs on the piggy mountain. Without him, christmas won't be as happy as it seems. Please save and free Santa from the hands of the piggy orcs and christmas will be happy again.
 
 You will be given 5 lives and 2 minutes to save Santa.
 Piggy orcs are bad, kill them all.
@@ -8,6 +8,9 @@ Destroy all the barracks to obtain the key to open Santa's cage.
 Press A and D to move. Press W to jump. LMB to Shoot.
 
 Good luck and Happy Holiday!
+
+Huge thanks to JGRAN for the critics and helping me searching for this free assets.
+Big thanks also to the Libgdx discord community.
 
 Free Assets used:
 
@@ -21,9 +24,11 @@ Explosions https://ansimuz.itch.io/explosion-animations-pack
 Heart icon https://gamedevelopershlok.itch.io/heartpack
 House https://meitdev.itch.io/top-down-house
 Christmas Tree https://vladpenn.itch.io/pixel-holiday-trees
+Christmas pack https://penzilla.itch.io/christmas-winter-holliday-tileset
 
 Fonts https://www.dafont.com/
 Particles https://github.com/raeleus/Particle-Park
 Gun SFX https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
 Pig SFX https://opengameart.org/content/farm-animals
 BGM https://opengameart.org/content/merry-x-mas
+Scary sound https://opengameart.org/content/random-gods-dark-and-silent

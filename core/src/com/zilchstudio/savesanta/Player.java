@@ -45,7 +45,7 @@ public class Player extends Actor implements Entity {
     float velocityY = 0;
     final float GRAVITY = -15f;
     float belowGround = 60f;
-    float life = 5;
+    float life = Static.diffPLife[Static.difficulty];
 
     boolean takenHit = false;
     boolean hitWall = false;
@@ -53,6 +53,7 @@ public class Player extends Actor implements Entity {
     boolean flip = false;
     boolean fastVelocity = false;
     boolean fire = false;
+    boolean end = false;
     
     Sound gunSound;
 
@@ -97,6 +98,12 @@ public class Player extends Actor implements Entity {
             return;
         }
 
+        if( end ) {
+            velocityX = 0;
+            velocityY = 0;
+            return;
+        }
+
         velocityX = 0;
         if( !takenHit ) {
             if( Gdx.input.isKeyPressed( Keys.A ) ) {
@@ -107,7 +114,7 @@ public class Player extends Actor implements Entity {
                 velocityX = 120 * delta;
                 flip = false;
             }
-            if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
+            if( (Gdx.input.isKeyJustPressed( Keys.W ) || Gdx.input.isKeyJustPressed( Keys.SPACE ) ) && hitGround ) {
                 velocityY = 8f;
             }
         } else {
@@ -140,7 +147,6 @@ public class Player extends Actor implements Entity {
         if( hit.isAnimationFinished( stateTime ) ) {
             takenHit = false;
         }
-
         
         if( velocityY < -12 ) {
             fastVelocity = true;
@@ -160,6 +166,7 @@ public class Player extends Actor implements Entity {
     Bullet tempBullet;
     float recoil = 0f;
     long time = 0;
+    long trigger_time = 0;
     Vector2 knockback = new Vector2();
 
     @Override
@@ -191,16 +198,25 @@ public class Player extends Actor implements Entity {
             batch.draw( weaponRegion, centerX + MathUtils.lerp( 0, recoil, Gdx.graphics.getDeltaTime() * 100f ), centerY - 11f, 0, 0, weaponRegion.getRegionWidth(), sub.x < 0 ? - weaponRegion.getRegionHeight() : weaponRegion.getRegionHeight(), .4f, .4f, angleDeg );
         }
 
-        if( life <= 0 )
+        if( life <= 0 || end )
             return;
 
         fire = false;
-        if( Gdx.input.isButtonPressed( Buttons.LEFT ) && time % 8 == 0 && !takenHit ) {
+        if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
+            shoot();
+        } else if( Gdx.input.isButtonPressed( Buttons.LEFT ) && !takenHit ) {
+            if( time <= trigger_time + 6f )
+                return;
+            shoot();
+        }
+    }
+
+    void shoot() {
+        trigger_time = time;
             gunSound.play( .3f, random.nextFloat() * 1f + .5f, 0f );
             tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
             getStage().addActor( tempBullet );
             fire = true;
-        }
     }
 
     public void takeHit() {

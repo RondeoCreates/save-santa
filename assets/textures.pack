@@ -1,390 +1,530 @@
 
 textures.png
-size: 2048, 256
+size: 2048, 512
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 dino_hit
   rotate: false
-  xy: 1472, 214
+  xy: 1236, 438
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 4
 dino_hit
   rotate: false
-  xy: 1498, 214
+  xy: 274, 76
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 1
 dino_hit
   rotate: false
-  xy: 1524, 214
+  xy: 1290, 466
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 6
 dino_hit
   rotate: false
-  xy: 1576, 214
+  xy: 326, 76
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 5
 dino_hit
   rotate: false
-  xy: 330, 84
+  xy: 352, 76
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 2
 dino_idle
   rotate: false
-  xy: 174, 84
+  xy: 1120, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 3
 dino_hit
   rotate: false
-  xy: 174, 84
+  xy: 1120, 394
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: 0
+dino_hit
+  rotate: false
+  xy: 1120, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 3
-dino_hit
+dino_idle
   rotate: false
-  xy: 174, 84
+  xy: 1120, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 0
 dino_idle
   rotate: false
-  xy: 174, 84
-  size: 24, 24
-  orig: 24, 24
-  offset: 0, 0
-  index: 0
-dino_idle
-  rotate: false
-  xy: 252, 84
+  xy: 300, 76
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 2
 dino_idle
   rotate: false
-  xy: 304, 84
+  xy: 1198, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 1
 dino_run
   rotate: false
-  xy: 1446, 214
+  xy: 1070, 366
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 1
 dino_run
   rotate: false
-  xy: 200, 84
+  xy: 1264, 466
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 3
 dino_run
   rotate: false
-  xy: 226, 84
+  xy: 1146, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 0
 dino_run
   rotate: false
-  xy: 1550, 214
+  xy: 1172, 394
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 5
 dino_run
   rotate: false
-  xy: 278, 84
+  xy: 1316, 466
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 2
 dino_run
   rotate: false
-  xy: 1602, 214
+  xy: 1342, 466
   size: 24, 24
   orig: 24, 24
   offset: 0, 0
   index: 4
 explosion
   rotate: false
-  xy: 2, 110
+  xy: 2, 362
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 explosion
   rotate: false
-  xy: 132, 110
+  xy: 2, 102
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 6
 explosion
   rotate: false
-  xy: 262, 110
+  xy: 262, 362
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
 explosion
   rotate: false
-  xy: 392, 110
+  xy: 392, 362
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 8
 explosion
   rotate: false
-  xy: 522, 110
+  xy: 262, 102
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 0
 explosion
   rotate: false
-  xy: 652, 110
+  xy: 392, 102
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 5
 explosion
   rotate: false
-  xy: 782, 110
+  xy: 652, 362
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion
   rotate: false
-  xy: 912, 110
+  xy: 652, 232
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 7
 explosion
   rotate: false
-  xy: 1042, 110
+  xy: 652, 102
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 4
 explosion
   rotate: false
-  xy: 1172, 110
+  xy: 782, 102
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 9
-pig_attack
+explosion_air
   rotate: false
-  xy: 74, 10
-  size: 26, 26
-  orig: 26, 26
+  xy: 2, 52
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
-  index: 1
-pig_attack
+  index: 7
+explosion_air
   rotate: false
-  xy: 110, 46
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 3
-pig_attack
-  rotate: false
-  xy: 146, 82
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 0
-pig_attack
-  rotate: false
-  xy: 1374, 140
-  size: 26, 26
-  orig: 26, 26
-  offset: 0, 0
-  index: 2
-pig_attack
-  rotate: false
-  xy: 1410, 176
-  size: 26, 26
-  orig: 26, 26
+  xy: 912, 312
+  size: 48, 48
+  orig: 48, 48
   offset: 0, 0
   index: 4
-pig_dead
+explosion_air
+  rotate: false
+  xy: 1042, 442
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+explosion_air
   rotate: false
   xy: 2, 2
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 6
+explosion_air
+  rotate: false
+  xy: 52, 52
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+explosion_air
+  rotate: false
+  xy: 912, 262
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 0
+explosion_air
+  rotate: false
+  xy: 962, 312
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 5
+explosion_air
+  rotate: false
+  xy: 1042, 392
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+explosion_barracks
+  rotate: false
+  xy: 2, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 6
+explosion_barracks
+  rotate: false
+  xy: 132, 362
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 11
+explosion_barracks
+  rotate: false
+  xy: 132, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 3
+explosion_barracks
+  rotate: false
+  xy: 132, 102
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 8
+explosion_barracks
+  rotate: false
+  xy: 262, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 0
+explosion_barracks
+  rotate: false
+  xy: 392, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 5
+explosion_barracks
+  rotate: false
+  xy: 522, 362
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 10
+explosion_barracks
+  rotate: false
+  xy: 522, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 2
+explosion_barracks
+  rotate: false
+  xy: 522, 102
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 7
+explosion_barracks
+  rotate: false
+  xy: 782, 362
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 4
+explosion_barracks
+  rotate: false
+  xy: 782, 232
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 9
+explosion_barracks
+  rotate: false
+  xy: 912, 362
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+pig_attack
+  rotate: false
+  xy: 1012, 334
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 1
+pig_attack
+  rotate: false
+  xy: 1042, 364
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 3
+pig_attack
+  rotate: false
+  xy: 1092, 392
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 0
+pig_attack
+  rotate: false
+  xy: 1236, 464
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 2
+pig_attack
+  rotate: false
+  xy: 246, 74
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: 4
+pig_dead
+  rotate: false
+  xy: 1128, 456
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_dead
   rotate: false
-  xy: 1302, 132
+  xy: 1128, 420
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 3
 pig_dead
   rotate: false
-  xy: 74, 38
+  xy: 1164, 420
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
 pig_dead
   rotate: false
-  xy: 1410, 204
+  xy: 1200, 420
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 2
 pig_hit
   rotate: false
-  xy: 38, 74
+  xy: 912, 226
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_hit
   rotate: false
-  xy: 1338, 168
+  xy: 1164, 456
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
 pig_idle
   rotate: false
-  xy: 1302, 204
+  xy: 52, 16
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 7
 pig_idle
   rotate: false
-  xy: 2, 38
+  xy: 102, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 4
 pig_idle
   rotate: false
-  xy: 2, 38
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 0
-pig_idle
-  rotate: false
-  xy: 2, 38
-  size: 34, 34
-  orig: 34, 34
-  offset: 0, 0
-  index: 1
-pig_idle
-  rotate: false
-  xy: 2, 38
+  xy: 102, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 3
 pig_idle
   rotate: false
-  xy: 2, 38
+  xy: 102, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 2
 pig_idle
   rotate: false
-  xy: 2, 38
+  xy: 102, 66
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 0
+pig_idle
+  rotate: false
+  xy: 102, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 5
 pig_idle
   rotate: false
-  xy: 1302, 168
+  xy: 102, 66
+  size: 34, 34
+  orig: 34, 34
+  offset: 0, 0
+  index: 1
+pig_idle
+  rotate: false
+  xy: 962, 276
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 9
 pig_idle
   rotate: false
-  xy: 38, 38
+  xy: 138, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 6
 pig_idle
   rotate: false
-  xy: 38, 2
+  xy: 912, 154
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 8
 pig_idle
   rotate: false
-  xy: 1338, 132
+  xy: 210, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 10
 pig_run
   rotate: false
-  xy: 2, 74
+  xy: 1092, 456
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 2
 pig_run
   rotate: false
-  xy: 1338, 204
+  xy: 1092, 420
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 4
 pig_run
   rotate: false
-  xy: 74, 74
+  xy: 912, 190
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 1
 pig_run
   rotate: false
-  xy: 1374, 204
+  xy: 174, 66
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 3
 pig_run
   rotate: false
-  xy: 110, 74
+  xy: 1200, 456
   size: 34, 34
   orig: 34, 34
   offset: 0, 0
   index: 0
 pig_run
   rotate: false
-  xy: 1374, 168
+  xy: 912, 118
   size: 34, 34
   orig: 34, 34
   offset: 0, 0

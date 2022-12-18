@@ -39,7 +39,7 @@ public class Enemy extends Actor implements Entity {
     float velocityY = 0;
     final float GRAVITY = -15f;
     float belowGround = 60f;
-    float life = 3;
+    float life = Static.diffLife[Static.difficulty];
 
     boolean takenHit = false;
     boolean hitWall = false;
@@ -66,6 +66,14 @@ public class Enemy extends Actor implements Entity {
             return null;
         };
     };
+
+    CollisionFilter fallSensor = new CollisionFilter() {
+        public Response filter(Item item, Item other) {
+            if( item.userData instanceof Solid )
+                return Response.slide;
+            return null;
+        };
+    };
     ArrayList<Item> items = new ArrayList<>();
     Player tempPlayer;
     Vector2 playerPosition = new Vector2();
@@ -88,6 +96,8 @@ public class Enemy extends Actor implements Entity {
         pigSound = Gdx.audio.newSound( Gdx.files.internal( "pig.wav" ) );
         hitSound = Gdx.audio.newSound( Gdx.files.internal( "pig_hit.wav" ) );
         dieSound = Gdx.audio.newSound( Gdx.files.internal( "pig_die.wav" ) );
+
+        flip = random.nextBoolean();
     }
 
     Vector2 knockback = new Vector2();
@@ -97,10 +107,23 @@ public class Enemy extends Actor implements Entity {
         if( disposed )
             return;
 
+        if( Static.end  )
+            return;
+
         stateTime += delta;
         time ++;
 
         velocityX = 0;
+
+        world.queryRect( getX() + (flip ? -24f : 24f), getY() - 24f, getWidth(), getHeight(), fallSensor, items );
+        if( items.size() <= 0 || hitWall ) {
+            flip = !flip;
+        }
+
+        if( flip )
+            velocityX = -1f;
+        else
+            velocityX = 1f;
 
         if( life <= 0 ) {
             if( !isDead ) {
@@ -117,25 +140,10 @@ public class Enemy extends Actor implements Entity {
                 return;
             } else {
                 velocityX = knockback.x;
-                velocityY = knockback.y;
             }
 
             
         }
-
-        //velocityX = random.nextBoolean() ? 1 : -1;
-
-        /*if( Gdx.input.isKeyPressed( Keys.A ) ) {
-            velocityX = -120 * delta;
-            flip = true;
-        }
-        if( Gdx.input.isKeyPressed( Keys.D ) ) {
-            velocityX = 120 * delta;
-            flip = false;
-        }
-        if( Gdx.input.isKeyJustPressed( Keys.W ) && hitGround ) {
-            velocityY = 8f;
-        }*/
 
         velocityY += GRAVITY * delta;
 
@@ -164,11 +172,17 @@ public class Enemy extends Actor implements Entity {
         if( time % 100 == 0 && !isAttacking ) {
             world.queryRect( getX() + (getWidth()/2) - 250f, getY() + (getHeight()/2) - 250f, 500f, 500f, playerSensor, items );
             if( items.size() > 0 && !isAttacking ) {
-                isAttacking = true;
-                stateTime = 0;
-                tempPlayer = (Player) items.get( 0 ).userData;
-                playerPosition.set( tempPlayer.getX(), tempPlayer.getY() );
-                getStage().addActor( new Bomb( new Vector2( getX() + getWidth()/2, getY() + getHeight()/2 ), playerPosition, 24f, world ) );
+
+                if( Static.difficulty > 1 )
+                    throwBomb = random.nextBoolean();
+
+                if( throwBomb ) {
+                    isAttacking = true;
+                    stateTime = 0;
+                    tempPlayer = (Player) items.get( 0 ).userData;
+                    playerPosition.set( tempPlayer.getX(), tempPlayer.getY() );
+                    getStage().addActor( new Bomb( new Vector2( getX() + getWidth()/2, getY() + getHeight()/2 ), playerPosition, 24f, world ) );
+                }
             }
             
         }
@@ -178,6 +192,8 @@ public class Enemy extends Actor implements Entity {
         }
 
     }
+
+    boolean throwBomb = true;
 
     @Override
     public void draw( Batch batch, float parentAlpha ) {

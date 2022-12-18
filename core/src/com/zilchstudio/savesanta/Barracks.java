@@ -1,15 +1,20 @@
 package com.zilchstudio.savesanta;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.dongbat.jbump.CollisionFilter;
 import com.dongbat.jbump.Item;
+import com.dongbat.jbump.Response;
 import com.dongbat.jbump.World;
 
 public class Barracks extends Actor implements Entity {
@@ -22,11 +27,28 @@ public class Barracks extends Actor implements Entity {
     int life = 5;
     boolean isDead = false;
     boolean takeHit = false;
+    boolean isStarted = true;
 
-    Texture healthy, hit, dead;
+    Texture healthy, hit;
     TextureRegion region = new TextureRegion();
+    TextureAtlas textures;
+    Animation<TextureRegion> explosion;
+    float stateTime;
+    long clockTime = 0;
+
+    CollisionFilter collisionFilter = new CollisionFilter() {
+        public Response filter(Item item, Item other) {
+            if( item.userData instanceof Enemy ) {
+                  ((Enemy) item.userData).takeHit();
+                return Response.slide;
+            }
+            return null;
+        };
+    };
+    ArrayList<Item> items = new ArrayList<>();
 
     public Barracks( float x, float y, float size, World<Entity> world ) {
+
         setBounds( x, y, size, size );
         item = new Item<Entity>( this );
         world.add( item, x, y, size, size );
@@ -34,7 +56,9 @@ public class Barracks extends Actor implements Entity {
 
         healthy = new Texture( Gdx.files.internal( "cave_entrance_healthy.png" ) );
         hit = new Texture( Gdx.files.internal( "cave_entrance_hit.png" ) );
-        dead = new Texture( Gdx.files.internal( "cave_entrance_dead.png" ) );
+
+        textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
+        explosion = new Animation<TextureRegion>( .1f, textures.findRegions( "explosion_barracks" ), Animation.PlayMode.NORMAL );
     }
 
     @Override
@@ -43,7 +67,7 @@ public class Barracks extends Actor implements Entity {
             return;
 
         if( isDead ) {
-            region.setRegion( dead );
+            region.setRegion( explosion.getKeyFrame( stateTime ) );
         } else if( takeHit ) {
             region.setRegion( hit );
             takeHit = false;
@@ -51,23 +75,37 @@ public class Barracks extends Actor implements Entity {
             region.setRegion( healthy );
         }
 
-        batch.draw( region, getX(), getY(), getWidth(), getHeight() );
+        if( isDead && explosion.isAnimationFinished( stateTime ) )
+            return;
+
+        if( isDead && !explosion.isAnimationFinished( stateTime ) ) {
+            world.queryRect( getX() + (isDead? -50f : 0f ), getY(), getWidth() + ( isDead? 100f : 0f ), getHeight() + ( isDead? 100f : 0 ), collisionFilter, items );
+        }
+
+        batch.draw( region, getX() + (isDead? -50f : 0f ), getY(), getWidth() + ( isDead? 100f : 0f ), getHeight() + ( isDead? 100f : 0 ) );
     }
 
 
     @Override
     public void act(float delta) {
+        if( enemies.size >= Static.difficulties[Static.difficulty] - 1 )
+            clockTime ++;
+
         if( disposed )
             return;
 
-        if( life <= 0 )
+        stateTime += delta;
+
+        if( life <= 0 && !isDead ) {
             isDead = true;
+            stateTime = 0;
+            Rumble.rumble( 10f, .8f );
+        }
         
-        if( life > 0 && TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) % 10 == 0 ) {
-            //Gdx.app.log( "DEBUG", "spawning" );
-            if( enemies.size < 4 ) {
-                enemies.add( new Enemy( getX() + ( random.nextBoolean() ? - random.nextInt( 30 ) : random.nextInt( 30 ) ), getY(), getWidth(), world ) );
-                getStage().addActor( enemies.get( enemies.size - 1 ) );
+        if( life > 0 && clockTime % 150f == 0 || isStarted ) {
+            isStarted = !isStarted;
+            if( enemies.size < Static.difficulties[Static.difficulty] ) {
+                addPigs();
             }
         }
 
@@ -77,6 +115,11 @@ public class Barracks extends Actor implements Entity {
             }
         }
 
+    }
+
+    void addPigs() {
+        enemies.add( new Enemy( getX() + ( random.nextBoolean() ? - random.nextInt( 30 ) : random.nextInt( 30 ) ), getY(), getWidth(), world ) );
+        getStage().addActor( enemies.get( enemies.size - 1 ) );
     }
 
     public void takeHit() {
@@ -91,7 +134,6 @@ public class Barracks extends Actor implements Entity {
         
         healthy.dispose();
         hit.dispose();
-        dead.dispose();
     }
     
 }

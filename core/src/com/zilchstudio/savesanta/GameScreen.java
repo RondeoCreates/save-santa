@@ -3,9 +3,10 @@ package com.zilchstudio.savesanta;
 import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -13,15 +14,18 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.dongbat.jbump.Item;
@@ -48,12 +52,20 @@ public class GameScreen extends ScreenAdapter {
     
     Table table;
     Skin skin;
-    Texture heartImage;
-    Texture keyImage;
-    Texture timeImage;
-    Label lifeLabel;
-    Label keyLabel;
-    Label timeLabel;
+    Texture heartImage, keyImage, timeImage;
+    Label lifeLabel, keyLabel, timeLabel;
+
+    Texture santaTexture, dinoTexture;
+    Label dialogLabel;
+    Table dialog;
+    Image dinoImage, santaImage;
+
+    Array<Barracks> barracks = new Array<>();
+    Barracks tempBarracks;
+    Rectangle santaCage = new Rectangle();
+    BloodOverlay bloodOverlay;
+
+    Music scaryMusic;
 
     public GameScreen( Core parent ) {
         this.parent = parent;
@@ -79,23 +91,57 @@ public class GameScreen extends ScreenAdapter {
         keyLabel.setFontScale( .5f );
 
         table.row();
-        table.add( new Image( timeImage ) );
-        table.add( timeLabel ).align( Align.left ).pad( 10f );
+        HorizontalGroup timeGroup = new HorizontalGroup();
+        timeGroup.addActor( new Image( timeImage ) );
+        timeGroup.addActor( timeLabel );
+        table.add( timeGroup ).align( Align.left ).fillX();
+        table.add().expandX();
         
         table.row();
-        table.add( new Image( heartImage ) );
-        table.add( lifeLabel ).align( Align.left ).pad( 10f );
+        HorizontalGroup heartGroup = new HorizontalGroup();
+        heartGroup.addActor( new Image( heartImage ) );
+        heartGroup.addActor( lifeLabel );
+        table.add( heartGroup ).align( Align.left ).fillX();
         table.add().expandX();
 
         table.row();
-        table.add( new Image( keyImage ) );
-        table.add( keyLabel ).align( Align.left ).pad( 10f );
+        HorizontalGroup keyGroup = new HorizontalGroup();
+        keyGroup.addActor( new Image( keyImage ) );
+        keyGroup.addActor( keyLabel );
+        table.add( keyGroup ).align( Align.left ).fillX();
         table.add().expandX();
 
         table.row();
         table.add().expandY();
 
+        table.row();
+
         hud.addActor( table );
+
+        santaTexture = new Texture( Gdx.files.internal( "santa.png" ) );
+        dinoTexture = new Texture( Gdx.files.internal( "dino.png" ) );
+
+        LabelStyle style2 = new LabelStyle( skin.getFont( "caviardreams" ), Color.BLACK );
+        dialogLabel = new Label( "default", style2 );
+        dialogLabel.setFontScale( .6f );
+
+        dialog = new Table( skin );
+        dialog.setBackground( skin.getDrawable( "window" ) );
+        dialog.pad( 3f );
+
+        dinoImage = new Image( dinoTexture );
+        santaImage = new Image( santaTexture );
+
+        dialog.add( dinoImage ).size( 24f * 3f );
+        dialog.add( dialogLabel ).expandX();
+        dialog.add( santaImage ).size( 24f * 3f );
+        dialog.setVisible( false );
+
+        table.add( dialog ).colspan( 2 ).fillX();
+
+        Static.end = false;
+        
+        //hud.setDebugAll( true );
     }
 
     @Override
@@ -135,7 +181,8 @@ public class GameScreen extends ScreenAdapter {
                 float trueY = y * TILE_SIZE;
 
                 if( cell.getTile().getProperties().containsKey( "barracks" ) ) {
-                    foreground.addActor( new Barracks( trueX, trueY, TILE_SIZE, world ) );
+                    barracks.add( tempBarracks = new Barracks( trueX, trueY, TILE_SIZE, world ) );
+                    foreground.addActor( tempBarracks );
                     continue;
                 }
 
@@ -150,6 +197,10 @@ public class GameScreen extends ScreenAdapter {
                     continue;
                 }
 
+                if( cell.getTile().getProperties().containsKey( "santa" ) ) {
+                    santaCage.set( trueX, trueY, TILE_SIZE, TILE_SIZE );
+                    continue;
+                }
                 
             }
         }
@@ -157,23 +208,100 @@ public class GameScreen extends ScreenAdapter {
         // Particle Effect
         foregroundFront.addActor( particleEffectActor = new ParticleEffectActor() );
 
+        // Blood Overlay
+        foregroundFront.addActor( bloodOverlay = new BloodOverlay() );
+
         //stage.setDebugAll( true );
         time_limit += TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() );
+
+        scaryMusic = Gdx.audio.newMusic( Gdx.files.internal( "scary.wav" ) );
+        scaryMusic.setLooping( true );
     }
 
-    long time_limit = 60 * 2;
+    long time_limit = Static.diffTime[Static.difficulty];
+    int deadBarracks = 0;
+    int key = 0;
+
+    String[] endTexts = { 
+        "Hi Santa! I'm here to save you.", 
+        "Oh ho ho ho. Please, don't torture me!",
+        "What are you talking about?",
+        "I'm here to release you.",
+        "Oh ho ho ho. You're the one who kidnapped me.",
+        "You will put me back again to this cell to torture me.",
+        "What?!!! Santa? I don't understand.",
+        "You are the Piggy orcs leader that put me here in this cage.",
+        "Please I beg you. Chistmas needs me. Release me please.",
+        "*Suddenly, you've realized that you put Santa",
+        "to the cage to play with him* Noooooooo!",
+        "*You found an amnesia pill on your pocket.*",
+        "*You lock Santa to his cage and takes the pill.*"
+    };
+    int[] endIndex = { 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0 };
+    int endCount = 0;
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear( Color.BLACK );
 
-        timeLabel.setText( String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) ));
-        lifeLabel.setText( "x " + (int) dino.life );
+        if( !dino.end ) {
+            Static.timeLeft = String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) );
+            timeLabel.setText( " " + String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) ));
+            lifeLabel.setText( " x " + (int) dino.life );
+            keyLabel.setText( " x " + key );
+        }
 
-        if( TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) > time_limit ) {
+        if( key >= 1 ) {
+            if( santaCage.contains( dino.getX() + dino.getWidth()/2, dino.getY() + dino.getHeight() / 2 ) ) {
+                // EndScreen
+                Static.end = true;
+                //parent.setScreen( new EndScreen( parent ) );\
+                if( !scaryMusic.isPlaying() ) {
+                    scaryMusic.play();
+                    parent.bgm.setVolume( .09f );
+                }
+                dino.end = true;
+                if( endCount < endTexts.length ) {
+                    dialog.setVisible( true );
+                    if( endIndex[endCount] == 0 ) {
+                        dinoImage.setVisible( true );
+                        santaImage.setVisible( false );
+                        dialogLabel.setColor( Color.BLACK );
+                    } else {
+                        dinoImage.setVisible( false );
+                        santaImage.setVisible( true );
+                        dialogLabel.setColor( Color.RED );
+                    }
+                    dialogLabel.setText( endTexts[endCount] );
+                    if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
+                        endCount ++;
+                    }
+                } else {
+                    parent.bgm.setVolume( .3f );
+                    parent.setScreen( new EndScreen( parent ) );
+                }
+                
+            }
+        }
+
+        {
+            deadBarracks = 0;
+            for( Barracks barrack : barracks ) {
+                if( barrack.isDead )
+                    deadBarracks ++;
+            }
+            if( deadBarracks >= barracks.size && key == 0 ) {
+                // Obtain key
+                key = 1;
+            }
+        }
+
+        if( TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) > time_limit && !dino.end ) {
             dino.instantDeath();
             Static.gameOvermsg = "You've ran out of time.";
         }
+
+        bloodOverlay.takenHit = dino.takenHit;
 
         stage.act();
         stage.draw();
@@ -195,7 +323,7 @@ public class GameScreen extends ScreenAdapter {
             stage.getCamera().translate( Rumble.getPos() );
         }
 
-        if( dino.life <= 0 ) {
+        if( dino.life <= 0 && dino.hit.isAnimationFinished( dino.stateTime )) {
             parent.setScreen( new GameOverScreen( parent ) );
         }
     }
@@ -203,6 +331,7 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update( width, height, true );
+        hud.getViewport().update( width, height, true );
     }
 
     @Override
@@ -220,6 +349,10 @@ public class GameScreen extends ScreenAdapter {
         heartImage.dispose();
         keyImage.dispose();
         timeImage.dispose();
+        bloodOverlay.dispose();
+        santaTexture.dispose();
+        dinoTexture.dispose();
+        scaryMusic.dispose();
     }
     
 }

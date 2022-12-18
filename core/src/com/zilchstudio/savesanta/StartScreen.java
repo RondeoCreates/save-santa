@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -23,11 +25,12 @@ public class StartScreen extends ScreenAdapter {
     Core parent;
     Label titleLabel;
     Label message;
-    Label startLabel;
     Label mechanics;
     Label tut_1_lbl, tut_2_lbl, tut_3_lbl, tut_4_lbl;
     Texture tut_1, tut_2, tut_3, tut_4;
     HorizontalGroup tut_1_g, tut_2_g, tut_3_g, tut_4_g;
+
+    TextButton easy, normal, hard;
 
     public StartScreen( Core parent ) {
         this.parent = parent;
@@ -55,10 +58,42 @@ public class StartScreen extends ScreenAdapter {
         message.setWidth( 550f );
         message.setAlignment( Align.center );
         
-        startLabel = new Label( "(Click anywhere to start)", style );
-        startLabel.setFontScale( .5f );
+        HorizontalGroup diffHorizontalGroup = new HorizontalGroup();
+        diffHorizontalGroup.space( 5f );
+        easy = new TextButton( "Easy", skin );
+        easy.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 0;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        easy.pad( 5f, 20f, 5f, 20f );
+        easy.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( easy );
+        
+        normal = new TextButton( "Normal", skin );
+        normal.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 1;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        normal.pad( 5f, 20f, 5f, 20f );
+        normal.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( normal );
 
-        mechanics = new Label( "Press A and D to move. Press W to jump. LMB to Shoot.", style );
+        hard = new TextButton( "Hard" , skin );
+        hard.addListener( new ClickListener() {
+            public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+                Static.difficulty = 2;
+                parent.setScreen( new GameScreen( parent ) );
+            };
+        } );
+        hard.pad( 5f, 20f, 5f, 20f );
+        hard.getLabel().setFontScale( .4f );
+        diffHorizontalGroup.addActor( hard );
+
+        mechanics = new Label( "Press A and D to move. Press W/SPACE to jump. LMB to Shoot.", style );
         mechanics.setFontScale( .5f );
         mechanics.setWrap( true );
         mechanics.setWidth( 550f );
@@ -110,13 +145,15 @@ public class StartScreen extends ScreenAdapter {
         table.add( mechanics ).width( 550f ).pad( 20f );
 
         table.row();
-        table.add( startLabel );
+        table.add( diffHorizontalGroup );
 
         table.setFillParent( true );
 
         stage.addActor( table );
 
         //stage.setDebugAll( true );
+
+        Gdx.input.setInputProcessor( stage );
     }
 
     @Override
@@ -126,9 +163,9 @@ public class StartScreen extends ScreenAdapter {
         stage.act();
         stage.draw();
 
-        if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
-            parent.setScreen( new GameScreen( parent ) );
-        }
+        /*if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
+            
+        }*/
     }
 
     @Override

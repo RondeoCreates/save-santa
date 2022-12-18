@@ -41,8 +41,10 @@ public class Bullet extends Actor implements Entity {
                 Rumble.rumble( 2f, .5f );
             }
             if( other.userData instanceof Enemy ) {
+                if( ((Enemy) other.userData ).isDead )
+                    return null;
                 tmpVector.set( ((Enemy) other.userData ).getX() + ((Enemy) other.userData ).getWidth()/2 , ((Enemy) other.userData ).getY() + ((Enemy) other.userData ).getHeight()/2 );
-                tmpVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 3f );
+                tmpVector.sub( getX() + getWidth()/2, getY() + getHeight()/2 ).nor().scl( 4f );
                 ((Enemy) other.userData ).knockback.set( tmpVector.x, 1.5f );
                 ((Enemy) other.userData ).takeHit();
                 Rumble.rumble( 2f, .5f );
@@ -74,6 +76,8 @@ public class Bullet extends Actor implements Entity {
     public void act(float delta) {
         if( disposed )
             return;
+        if( !getStage().getCamera().frustum.pointInFrustum( getX() + getWidth()/2, getY() + getHeight()/2, 0 ) )
+            dead = true;
 
         if( dead ) {
             world.remove( item );

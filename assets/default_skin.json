@@ -27,10 +27,15 @@ Color: {
 		a: 1
 	}
 }
-ButtonStyle: {
-	default: {
-		up: blue
-		down: blue_tinted
+TintedDrawable: {
+	window_santa: {
+		name: window
+		color: {
+			r: 0.93333334
+			g: 0.31764707
+			b: 0.31764707
+			a: 1
+		}
 	}
 }
 LabelStyle: {
@@ -47,13 +52,23 @@ TextButtonStyle: {
 	default: {
 		font: caviardreams
 		fontColor: RGBA_255_255_255_255
-		up: blue
-		down: blue_tinted
+		up: button_clicked
+		down: button_normal
 	}
 }
 TextTooltipStyle: {
 	default: {
 		label: default
+	}
+}
+WindowStyle: {
+	default: {
+		background: window
+		titleFont: F04b
+	}
+	santa_window: {
+		background: window_santa
+		titleFont: F04b
 	}
 }
 }
