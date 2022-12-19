@@ -17,13 +17,18 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -53,6 +58,7 @@ public class GameScreen extends ScreenAdapter {
     Table table;
     Skin skin;
     Texture heartImage, keyImage, timeImage;
+    Touchpad moveTouchpad, fireTouchpad;
     Label lifeLabel, keyLabel, timeLabel;
 
     Texture santaTexture, dinoTexture;
@@ -140,8 +146,104 @@ public class GameScreen extends ScreenAdapter {
         table.add( dialog ).colspan( 2 ).fillX();
 
         Static.end = false;
+
+        if( Static.mobileDevice ) {
+            createTouchpad();
+        }
         
-        hud.setDebugAll( true );
+        //hud.setDebugAll( true );
+    }
+
+    public void createTouchpad() {
+
+        moveTouchpad = new Touchpad( 0, skin.get( "default", TouchpadStyle.class ) );
+        fireTouchpad = new Touchpad( 0, skin.get( "fire", TouchpadStyle.class ) );
+        
+        moveTouchpad.setPosition( 50, 50 );
+        fireTouchpad.setPosition( hud.getWidth() - fireTouchpad.getWidth() - 50, 50 );
+        
+        hud.addActor( moveTouchpad );
+        hud.addActor( fireTouchpad );
+
+        hud.addListener( new InputListener() {
+
+            Vector2 p = new Vector2();
+            Rectangle b = new Rectangle();
+
+            Vector2 p2 = new Vector2();
+            Rectangle b2 = new Rectangle();
+
+            @Override
+            public boolean touchDown( InputEvent event, float x, float y, int pointer, int button ) {
+                if( x < hud.getWidth() / 2 ) {
+                    if( event.getTarget() != moveTouchpad ) {
+                        // If we didn't actually touch the touchpad, set position to our touch point
+                        b.set( moveTouchpad.getX(), moveTouchpad.getY(), moveTouchpad.getWidth(), moveTouchpad.getHeight() );
+                        b.setCenter( x, y );
+                        moveTouchpad.setBounds( b.x, b.y, b.width, b.height );
+                        // Let the touchpad know to start tracking touch
+                        moveTouchpad.fire( event );
+                    }
+                }
+
+                if( x > hud.getWidth() / 2 ) {
+                    if( event.getTarget() != fireTouchpad ) {
+                        // If we didn't actually touch the touchpad, set position to our touch point
+                        b2.set( fireTouchpad.getX(), fireTouchpad.getY(), fireTouchpad.getWidth(), fireTouchpad.getHeight() );
+                        b2.setCenter( x, y );
+                        fireTouchpad.setBounds( b2.x, b2.y, b2.width, b2.height );
+                        // Let the touchpad know to start tracking touch
+                        fireTouchpad.fire( event );
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public void touchDragged( InputEvent event, float x, float y, int pointer ) {
+                /*if( x < hud.getWidth() / 2 ) {
+                    moveTouchpad.stageToLocalCoordinates( p.set(x, y) );
+                    if( moveTouchpad.hit( p.x, p.y, true ) == null ) {
+                        // If we moved outside of the touchpad, have it follow our touch position;
+                        // but we want to keep the direction of the knob, so shift to the edge of the
+                        // touchpad's radius with a small amount of smoothing, so it looks nice.
+                        p.set( -moveTouchpad.getKnobPercentX(), -moveTouchpad.getKnobPercentY() ).nor()
+                                .scl( Math.min( moveTouchpad.getWidth(), moveTouchpad.getHeight() ) * 0.5f )
+                                .add( x, y );
+                                moveTouchpad.addAction( Actions.moveToAligned( p.x, p.y, Align.center, 0.15f ) );
+                    }
+                }
+                
+                if( x > hud.getWidth() / 2 ) {
+                    fireTouchpad.stageToLocalCoordinates( p2.set(x, y) );
+                    if( fireTouchpad.hit( p2.x, p2.y, true ) == null ) {
+                        // If we moved outside of the touchpad, have it follow our touch position;
+                        // but we want to keep the direction of the knob, so shift to the edge of the
+                        // touchpad's radius with a small amount of smoothing, so it looks nice.
+                        p2.set( -fireTouchpad.getKnobPercentX(), -fireTouchpad.getKnobPercentY() ).nor()
+                                .scl( Math.min( fireTouchpad.getWidth(), fireTouchpad.getHeight() ) * 0.5f )
+                                .add( x, y );
+                                fireTouchpad.addAction( Actions.moveToAligned( p2.x, p2.y, Align.center, 0.15f ) );
+                    }
+                }*/
+            }
+
+            @Override
+            public void touchUp( InputEvent event, float x, float y, int pointer, int button ) {
+                if( x < hud.getWidth() / 2 ) {
+                    // Put the touchpad back to its original position
+                    moveTouchpad.clearActions();
+                    moveTouchpad.addAction( Actions.moveTo( 50, 50, 0.15f ) );
+                }
+                
+                if( x > hud.getWidth() / 2 ) {
+                    fireTouchpad.clearActions();
+                    fireTouchpad.addAction( Actions.moveTo( hud.getWidth() - fireTouchpad.getWidth() - 50, 50, 0.15f ) );
+                }
+            }
+        } );
+
+        Gdx.input.setInputProcessor( hud );
     }
 
     @Override
@@ -191,7 +293,7 @@ public class GameScreen extends ScreenAdapter {
                 }
 
                 if( cell.getTile().getProperties().containsKey( "dino" ) ) {
-                    dino = new Player( trueX , trueY, TILE_SIZE, world );
+                    dino = new Player( trueX , trueY, TILE_SIZE, world, moveTouchpad, fireTouchpad );
                     playerGroup.addActor( dino );
                     cell.setTile(null);
                     continue;

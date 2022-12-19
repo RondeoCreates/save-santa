@@ -6,35 +6,35 @@ filter: Linear, Linear
 repeat: none
 F04b
   rotate: false
-  xy: 1, 583
+  xy: 1, 587
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 bg_transparent
   rotate: false
-  xy: 515, 1063
+  xy: 617, 1067
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 blue
   rotate: false
-  xy: 1, 35
+  xy: 1, 1
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 blue_tinted
   rotate: false
-  xy: 515, 1029
+  xy: 39, 39
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 button_clicked
   rotate: false
-  xy: 549, 1063
+  xy: 515, 927
   size: 32, 32
   split: 5, 5, 16, 15
   pad: 0, 33, 0, 33
@@ -43,7 +43,7 @@ button_clicked
   index: -1
 button_normal
   rotate: false
-  xy: 1, 1
+  xy: 553, 965
   size: 32, 32
   split: 5, 5, 16, 15
   pad: 0, 33, 0, 33
@@ -52,14 +52,35 @@ button_normal
   index: -1
 caviardreams
   rotate: false
-  xy: 1, 69
+  xy: 1, 73
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+Joystick
+  rotate: false
+  xy: 515, 999
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+handle-fire
+  rotate: false
+  xy: 1, 35
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+handle-move
+  rotate: false
+  xy: 515, 961
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
 window
   rotate: false
-  xy: 35, 43
+  xy: 617, 1041
   size: 24, 24
   split: 2, 2, 2, 2
   pad: 0, 25, 0, 25

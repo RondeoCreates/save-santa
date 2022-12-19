@@ -61,6 +61,16 @@ TextTooltipStyle: {
 		label: default
 	}
 }
+TouchpadStyle: {
+	default: {
+		background: Joystick
+		knob: handle-move
+	}
+	fire: {
+		background: Joystick
+		knob: handle-fire
+	}
+}
 WindowStyle: {
 	default: {
 		background: window

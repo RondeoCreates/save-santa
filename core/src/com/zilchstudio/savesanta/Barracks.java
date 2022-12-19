@@ -45,6 +45,15 @@ public class Barracks extends Actor implements Entity {
             return null;
         };
     };
+
+    CollisionFilter playerSensor = new CollisionFilter() {
+        public Response filter(Item item, Item other) {
+            if( item.userData instanceof Player )
+                return Response.slide;
+            return null;
+        };
+    };
+    
     ArrayList<Item> items = new ArrayList<>();
 
     public Barracks( float x, float y, float size, World<Entity> world ) {
@@ -88,7 +97,7 @@ public class Barracks extends Actor implements Entity {
 
     @Override
     public void act(float delta) {
-        if( enemies.size >= Static.difficulties[Static.difficulty] - 1 )
+        //if( enemies.size <= Static.difficulties[Static.difficulty] - 1 )
             clockTime ++;
 
         if( disposed )
@@ -104,9 +113,11 @@ public class Barracks extends Actor implements Entity {
         
         if( life > 0 && clockTime % 150f == 0 || isStarted ) {
             isStarted = !isStarted;
-            if( enemies.size < Static.difficulties[Static.difficulty] ) {
-                addPigs();
-            }
+            world.queryRect( getX() + (getWidth()/2) - 500f, getY() + (getHeight()/2) - 500f, 1000f, 1000f, playerSensor, items );
+            if( items.size() > 0 )
+                if( enemies.size < Static.difficulties[Static.difficulty] ) {
+                    addPigs();
+                }
         }
 
         for ( int i = 0; i < enemies.size; i ++ ) {

@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.dongbat.jbump.Collision;
 import com.dongbat.jbump.CollisionFilter;
 import com.dongbat.jbump.Item;
@@ -54,6 +55,8 @@ public class Player extends Actor implements Entity {
     boolean fastVelocity = false;
     boolean fire = false;
     boolean end = false;
+
+    Touchpad moveTouchpad, fireTouchpad;
     
     Sound gunSound;
 
@@ -66,8 +69,10 @@ public class Player extends Actor implements Entity {
         }
     };
 
-    public Player( float x, float y, float size, World<Entity> world ) {
+    public Player( float x, float y, float size, World<Entity> world, Touchpad moveTouchpad, Touchpad fireTouchpad ) {
         this.world = world;
+        this.moveTouchpad = moveTouchpad;
+        this.fireTouchpad = fireTouchpad;
         
         setBounds( x, y, size, size );
         textures = new TextureAtlas( Gdx.files.internal( "textures.pack" ) );
@@ -106,17 +111,32 @@ public class Player extends Actor implements Entity {
 
         velocityX = 0;
         if( !takenHit ) {
-            if( Gdx.input.isKeyPressed( Keys.A ) ) {
-                velocityX = -120 * delta;
-                flip = true;
+            if( Static.mobileDevice ) {
+                if( moveTouchpad.getKnobPercentY() > .5f && hitGround ) {
+                    velocityY = 8f;
+                }
+                if( moveTouchpad.getKnobPercentX() < -.5f ) {
+                    velocityX = -120 * delta;
+                    flip = true;
+                }
+                if( moveTouchpad.getKnobPercentX() > .5f ) {
+                    velocityX = 120 * delta;
+                    flip = false;
+                }
+            } else {
+                if( Gdx.input.isKeyPressed( Keys.A ) ) {
+                    velocityX = -120 * delta;
+                    flip = true;
+                }
+                if( Gdx.input.isKeyPressed( Keys.D ) ) {
+                    velocityX = 120 * delta;
+                    flip = false;
+                }
+                if( (Gdx.input.isKeyJustPressed( Keys.W ) || Gdx.input.isKeyJustPressed( Keys.SPACE ) ) && hitGround ) {
+                    velocityY = 8f;
+                }
             }
-            if( Gdx.input.isKeyPressed( Keys.D ) ) {
-                velocityX = 120 * delta;
-                flip = false;
-            }
-            if( (Gdx.input.isKeyJustPressed( Keys.W ) || Gdx.input.isKeyJustPressed( Keys.SPACE ) ) && hitGround ) {
-                velocityY = 8f;
-            }
+            
         } else {
             velocityX = knockback.x;
             velocityY = knockback.y;
@@ -148,7 +168,7 @@ public class Player extends Actor implements Entity {
             takenHit = false;
         }
         
-        if( velocityY < -12 ) {
+        if( /*velocityY < -12f*/ getY() < 300f ) {
             fastVelocity = true;
         }
 
@@ -186,10 +206,19 @@ public class Player extends Actor implements Entity {
 
         centerX = getX() + getWidth() / 2;
         centerY = getY() + getHeight() / 2;
-        touchPoint.set( Gdx.input.getX(), Gdx.input.getY(), 0 );
-        touchPoint = getParent().getStage().getCamera().unproject( touchPoint );
-        sub = touchPointV2.set( touchPoint.x, touchPoint.y ).sub( centerX, centerY );
-        angleDeg = sub.angleDeg();
+        if( Static.mobileDevice ) {
+            if( fireTouchpad.getKnobPercentX() != 0 || fireTouchpad.getKnobPercentY() != 0 ) {
+                touchPoint.set( fireTouchpad.getKnobPercentX(), fireTouchpad.getKnobPercentY(), 0 );
+                touchPoint.scl( 10f );
+                sub = touchPointV2.set( touchPoint.x, touchPoint.y );
+                angleDeg = sub.angleDeg();
+            }
+        } else {
+            touchPoint.set( Gdx.input.getX(), Gdx.input.getY(), 0 );
+            touchPoint = getParent().getStage().getCamera().unproject( touchPoint );
+            sub = touchPointV2.set( touchPoint.x, touchPoint.y ).sub( centerX, centerY );
+            angleDeg = sub.angleDeg();
+        }
 
         batch.draw( renderTexture, sub.x < 0  ? getX() + 5f + getWidth() : getX() - 5f, getY() - 5f, sub.x < 0  ? - (getWidth() + 10f) : getWidth() + 10f, getHeight() + 10f );
 
@@ -202,13 +231,22 @@ public class Player extends Actor implements Entity {
             return;
 
         fire = false;
-        if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
-            shoot();
-        } else if( Gdx.input.isButtonPressed( Buttons.LEFT ) && !takenHit ) {
-            if( time <= trigger_time + 6f )
-                return;
-            shoot();
+        if( Static.mobileDevice ) {
+            if( fireTouchpad.getKnobPercentX() != 0 || fireTouchpad.getKnobPercentY() != 0 ) {
+                if( time <= trigger_time + 6f )
+                    return;
+                shoot();
+            }
+        } else {
+            if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
+                shoot();
+            } else if( Gdx.input.isButtonPressed( Buttons.LEFT ) && !takenHit ) {
+                if( time <= trigger_time + 6f )
+                    return;
+                shoot();
+            }
         }
+        
     }
 
     void shoot() {
