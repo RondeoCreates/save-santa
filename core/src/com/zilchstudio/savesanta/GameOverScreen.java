@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameOverScreen extends ScreenAdapter {
     Table table;
@@ -30,7 +31,7 @@ public class GameOverScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new ExtendViewport( 600, 300 ) );
+        stage = new Stage( new ScreenViewport() );
         table = new Table( skin = new Skin( Gdx.files.internal( "default_skin.json" ) ) );
 
         gameOverLabel = new Label( "GAME OVER", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );

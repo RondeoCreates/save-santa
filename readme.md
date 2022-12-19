@@ -1,34 +1,9 @@
-Santa is in need of help. He's been kidnapped by the piggy orcs on the piggy mountain. Without him, christmas won't be as happy as it seems. Please save and free Santa from the hands of the piggy orcs and christmas will be happy again.
-
-You will be given 5 lives and 2 minutes to save Santa.
-Piggy orcs are bad, kill them all.
-Destroy their barracks to disable them from spawning over time.
-Destroy all the barracks to obtain the key to open Santa's cage.
-
-Press A and D to move. Press W to jump. LMB to Shoot.
-
-Good luck and Happy Holiday!
-
-Huge thanks to JGRAN for the critics and helping me searching for this free assets.
-Big thanks also to the Libgdx discord community.
-
-Free Assets used:
-
-Pigs and Bombs https://pixelfrog-assets.itch.io/kings-and-pigs
-Santa https://elthen.itch.io/2d-pixel-art-santa-sprites
-Mountain Backgrounds https://vnitti.itch.io/glacial-mountains-parallax-background
-Terrain https://spirit-warrior.itch.io/cold-valleys-winter-themed-pixel-art-asset-pack
-Dino Characters https://arks.itch.io/dino-characters
-Guns/Weapons https://0x42-0x4f-0x49.itch.io/pixel-art-weapons
-Explosions https://ansimuz.itch.io/explosion-animations-pack
-Heart icon https://gamedevelopershlok.itch.io/heartpack
-House https://meitdev.itch.io/top-down-house
-Christmas Tree https://vladpenn.itch.io/pixel-holiday-trees
-Christmas pack https://penzilla.itch.io/christmas-winter-holliday-tileset
-
-Fonts https://www.dafont.com/
-Particles https://github.com/raeleus/Particle-Park
-Gun SFX https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
-Pig SFX https://opengameart.org/content/farm-animals
-BGM https://opengameart.org/content/merry-x-mas
-Scary sound https://opengameart.org/content/random-gods-dark-and-silent
+<p>Santa is in need of help.&nbsp; He's been kidnapped by the piggy orcs on the piggy mountain. Without him, Christmas won't be as happy as it seems. Please save and free Santa from the hands of the piggy orcs and Christmas will be happy again.</p>
+<ul><li>You will be given [n] lives and [n] seconds to save Santa.</li><li>Piggy orcs are bad, kill them all.</li><li>Destroy their barracks to disable them from spawning over time.</li><li>Destroy all the barracks to obtain the key to open Santa's cage.</li><li>Press A and D to move. Press W/SPACE to jump. LMB to Shoot.</li></ul>
+<p>Good luck and Happy Holiday!</p>
+<p>Huge thanks to JGRAN for the critics. He also&nbsp;helped me searched for these free assets.</p>
+<p>Big thanks also to the LibGDX discord community.</p>
+<p><strong>Credits:</strong></p>
+<ul><li>Pigs and Bombs <a href="https://pixelfrog-assets.itch.io/kings-and-pigs">https://pixelfrog-assets.itch.io/kings-and-pigs</a></li><li>Santa <a href="https://elthen.itch.io/2d-pixel-art-santa-sprites">https://elthen.itch.io/2d-pixel-art-santa-sprites</a></li><li>Mountain Backgrounds <a href="https://vnitti.itch.io/glacial-mountains-parallax-background">https://vnitti.itch.io/glacial-mountains-parallax-background</a></li><li>Terrain <a href="https://spirit-warrior.itch.io/cold-valleys-winter-themed-pixel-art-asset-pack">https://spirit-warrior.itch.io/cold-valleys-winter-themed-pixel-art-asset-pack</a></li><li>Dino Characters <a href="https://arks.itch.io/dino-characters">https://arks.itch.io/dino-characters</a></li><li>Guns/Weapons <a href="https://0x42-0x4f-0x49.itch.io/pixel-art-weapons">https://0x42-0x4f-0x49.itch.io/pixel-art-weapons</a></li><li>Explosions <a href="https://ansimuz.itch.io/explosion-animations-pack">https://ansimuz.itch.io/explosion-animations-pack</a></li><li>Heart icon <a href="https://gamedevelopershlok.itch.io/heartpack">https://gamedevelopershlok.itch.io/heartpack</a></li><li>House <a href="https://meitdev.itch.io/top-down-house">https://meitdev.itch.io/top-down-house</a></li><li>Christmas Tree <a href="https://vladpenn.itch.io/pixel-holiday-trees">https://vladpenn.itch.io/pixel-holiday-trees</a></li><li>Christmas pack <a href="https://penzilla.itch.io/christmas-winter-holliday-tileset">https://penzilla.itch.io/christmas-winter-holliday-tileset</a></li><li>Fonts <a href="https://www.dafont.com/">https://www.dafont.com/</a></li><li>Particles <a href="https://github.com/raeleus/Particle-Park">https://github.com/raeleus/Particle-Park</a></li><li>Gun SFX <a href="https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots">https://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots</a></li><li>Pig SFX <a href="https://opengameart.org/content/farm-animals">https://opengameart.org/content/farm-animals</a></li><li>BGM <a href="https://opengameart.org/content/merry-x-mas">https://opengameart.org/content/merry-x-mas</a></li><li>Scary sound <a href="https://opengameart.org/content/random-gods-dark-and-silent">https://opengameart.org/content/random-gods-dark-and-silent</a></li></ul>
+<p>Frameworks and Engines used:</p>
+<ul><li>LibGDX framework.</li><li>JBUMP</li></ul>

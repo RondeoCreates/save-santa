@@ -16,7 +16,7 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
 
-    version = '1.0'
+    version = '1.5'
     ext {
         appName = "Save Santa"
         gdxVersion = '1.11.0'

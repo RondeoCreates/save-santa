@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class EndScreen extends ScreenAdapter {
     Table table;
@@ -30,7 +30,7 @@ public class EndScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new ExtendViewport( 600, 300 ) );
+        stage = new Stage( new ScreenViewport() );
         table = new Table( skin = new Skin( Gdx.files.internal( "default_skin.json" ) ) );
 
         gameOverLabel = new Label( "GOOD JOB!", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );

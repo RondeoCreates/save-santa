@@ -17,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class StartScreen extends ScreenAdapter {
     Table table;
@@ -38,7 +40,7 @@ public class StartScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new ExtendViewport( 600, 300 ) );
+        stage = new Stage( new ScreenViewport() );
 
         tut_1 = new Texture( Gdx.files.internal( "heart_live.png" ) );
         tut_2 = new Texture( Gdx.files.internal( "pig.png" ) );
@@ -48,8 +50,8 @@ public class StartScreen extends ScreenAdapter {
         table = new Table( skin = new Skin( Gdx.files.internal( "default_skin.json" ) ) );
 
         titleLabel = new Label( "SAVE SANTA", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );
-        String head =   "Hello Agent Dino. Santa is in need of help. He's been kidnapped by the piggy orcs on the piggy mountain. Without him, christmas won't be as happy as it seems." +
-                        " Please save and free Santa from the hands of the piggy orcs and christmas will be happy again.";
+        String head =   "Hello Agent Dino. Santa is in need of help. He's been kidnapped by the piggy orcs on the piggy mountain. Without him, Christmas won't be as happy as it seems." +
+                        " Please save and free Santa from the hands of the piggy orcs and Christmas will be happy again.";
         LabelStyle style = new LabelStyle( skin.getFont( "caviardreams" ), Color.WHITE );
         
         message = new Label( head, style );
@@ -109,7 +111,7 @@ public class StartScreen extends ScreenAdapter {
         tut_1_g = new HorizontalGroup();
         tut_1_g.pad( 3f );
         tut_1_g.addActor( new Image( tut_1 ) );
-        tut_1_lbl = new Label( " You will be given 5 lives and 2 minutes to save Santa." , style );
+        tut_1_lbl = new Label( " You will be given [n] lives and [n] minutes to save Santa." , style );
         tut_1_lbl.setFontScale( .4f );
         tut_1_g.addActor( tut_1_lbl );
         table.add( tut_1_g );
@@ -141,8 +143,10 @@ public class StartScreen extends ScreenAdapter {
         tut_4_g.addActor( tut_4_lbl );
         table.add( tut_4_g );
 
-        table.row();
-        table.add( mechanics ).width( 550f ).pad( 20f );
+        if( !Static.mobileDevice ) {
+            table.row();
+            table.add( mechanics ).width( 550f ).pad( 20f );
+        }
 
         table.row();
         table.add( diffHorizontalGroup );

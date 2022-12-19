@@ -141,7 +141,7 @@ public class GameScreen extends ScreenAdapter {
 
         Static.end = false;
         
-        //hud.setDebugAll( true );
+        hud.setDebugAll( true );
     }
 
     @Override

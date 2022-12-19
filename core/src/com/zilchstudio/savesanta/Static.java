@@ -11,4 +11,5 @@ public class Static {
     public static int difficulty = 0;
     public static boolean end = false;
     public static String timeLeft = "";
+    public static boolean mobileDevice = false;
 }
