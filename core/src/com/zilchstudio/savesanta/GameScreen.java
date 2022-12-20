@@ -342,9 +342,16 @@ public class GameScreen extends ScreenAdapter {
     int[] endIndex = { 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0 };
     int endCount = 0;
 
+    int lastFPS = 0;
+
     @Override
     public void render(float delta) {
         ScreenUtils.clear( Color.BLACK );
+
+        /*if( Gdx.graphics.getFramesPerSecond() != lastFPS ) {
+            lastFPS = Gdx.graphics.getFramesPerSecond();
+            System.out.println( lastFPS );
+        }*/
 
         if( !dino.end ) {
             Static.timeLeft = String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) );
