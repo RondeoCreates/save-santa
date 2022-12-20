@@ -40,7 +40,7 @@ public class StartScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new ScreenViewport() );
+        stage = new Stage( new FitViewport( 800, 400 ) );
 
         tut_1 = new Texture( Gdx.files.internal( "heart_live.png" ) );
         tut_2 = new Texture( Gdx.files.internal( "pig.png" ) );

@@ -115,15 +115,18 @@ public class Enemy extends Actor implements Entity {
 
         velocityX = 0;
 
-        world.queryRect( getX() + (flip ? -24f : 24f), getY() - 24f, getWidth(), getHeight(), fallSensor, items );
-        if( items.size() <= 0 || hitWall ) {
-            flip = !flip;
-        }
+        if( life > 0 ) {
+            world.queryRect( getX() + (flip ? -24f : 24f), getY() - 24f, getWidth(), getHeight(), fallSensor, items );
+            if( items.size() <= 0 || hitWall ) {
+                flip = !flip;
+            }
 
-        if( flip )
-            velocityX = -1f;
-        else
-            velocityX = 1f;
+            if( flip )
+                velocityX = -1f;
+            else
+                velocityX = 1f;
+        }
+        
 
         if( life <= 0 ) {
             if( !isDead ) {

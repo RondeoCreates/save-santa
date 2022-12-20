@@ -11,6 +11,13 @@ F04b
   orig: 512, 512
   offset: 0, 0
   index: -1
+Joystick
+  rotate: false
+  xy: 515, 999
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 bg_transparent
   rotate: false
   xy: 617, 1067
@@ -55,13 +62,6 @@ caviardreams
   xy: 1, 73
   size: 512, 512
   orig: 512, 512
-  offset: 0, 0
-  index: -1
-Joystick
-  rotate: false
-  xy: 515, 999
-  size: 100, 100
-  orig: 100, 100
   offset: 0, 0
   index: -1
 handle-fire

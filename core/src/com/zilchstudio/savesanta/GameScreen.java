@@ -455,6 +455,8 @@ public class GameScreen extends ScreenAdapter {
         santaTexture.dispose();
         dinoTexture.dispose();
         scaryMusic.dispose();
+
+        world.reset();
     }
     
 }
