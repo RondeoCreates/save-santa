@@ -2,7 +2,6 @@ package com.zilchstudio.savesanta;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,9 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class StartScreen extends ScreenAdapter {
     Table table;
@@ -40,7 +37,7 @@ public class StartScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new FitViewport( 800, 400 ) );
+        stage = new Stage( new FitViewport( 800, 500 ) );
 
         tut_1 = new Texture( Gdx.files.internal( "heart_live.png" ) );
         tut_2 = new Texture( Gdx.files.internal( "pig.png" ) );
@@ -151,6 +148,20 @@ public class StartScreen extends ScreenAdapter {
         table.row();
         table.add( diffHorizontalGroup );
 
+        table.row();
+        table.add().height( 40f );
+
+        table.row();
+        TextButton back = new TextButton( "Back", skin );
+        table.add( back ).colspan( 2 );
+        back.addListener( new ClickListener() {
+            public void clicked( com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y ) {
+                parent.setScreen( new MenuScreen( parent ) );
+            };
+        } );
+        back.pad( 5f, 20f, 5f, 20f );
+        back.getLabel().setFontScale( .4f );
+
         table.setFillParent( true );
 
         stage.addActor( table );
@@ -166,10 +177,6 @@ public class StartScreen extends ScreenAdapter {
         
         stage.act();
         stage.draw();
-
-        /*if( Gdx.input.isButtonJustPressed( Buttons.LEFT ) ) {
-            
-        }*/
     }
 
     @Override

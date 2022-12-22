@@ -3,6 +3,7 @@ package com.zilchstudio.savesanta;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap;
 
@@ -26,6 +27,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 public class Core extends Game {
 
     Music bgm;
+    Preferences preferences;
     
     @Override
     public void create() {
@@ -33,12 +35,20 @@ public class Core extends Game {
         Gdx.graphics.setCursor( Gdx.graphics.newCursor(pm, 16, 16 ) );
         pm.dispose();
 
-        setScreen( new StartScreen( this ) );
+        setSound();
+
+        setScreen( new MenuScreen( this ) );
 
         bgm = Gdx.audio.newMusic( Gdx.files.internal( "bgm.wav" ) );
         bgm.setLooping( true );
-        bgm.setVolume( .3f );
+        bgm.setVolume( .3f * Static.bgmVol );
         bgm.play();
+    }
+
+    public void setSound() {
+        preferences = Gdx.app.getPreferences( "save-santa-settings" );
+        Static.bgmVol = preferences.getFloat( "bgmVol", .5f );
+        Static.sfxVol = preferences.getFloat( "sfxVol", .5f );
     }
 
     @Override

@@ -11,5 +11,8 @@ public class Static {
     public static int difficulty = 0;
     public static boolean end = false;
     public static String timeLeft = "";
+    public static int lifeLeft = 0;
     public static boolean mobileDevice = false;
+    public static float bgmVol = 1f;
+    public static float sfxVol = 1f;
 }

@@ -86,6 +86,20 @@ public class GameOverScreen extends ScreenAdapter {
         table.row();
         table.add( diffHorizontalGroup );
 
+        table.row();
+        table.add().height( 40f );
+        
+        table.row();
+        TextButton back = new TextButton( "Back", skin );
+        table.add( back ).colspan( 2 );
+        back.addListener( new ClickListener() {
+            public void clicked( com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y ) {
+                parent.setScreen( new MenuScreen( parent ) );
+            };
+        } );
+        back.pad( 5f, 20f, 5f, 20f );
+        back.getLabel().setFontScale( .4f );
+
         table.setFillParent( true );
 
         stage.addActor( table );

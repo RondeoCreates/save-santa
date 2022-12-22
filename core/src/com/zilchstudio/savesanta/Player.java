@@ -176,7 +176,13 @@ public class Player extends Actor implements Entity {
             instantDeath();
             Static.gameOvermsg = "You hit the ground too hard.";   
         }
+
+        if( SpriteShake.getRumbleTimeLeft() > 0 ) {
+            SpriteShake.tick( Gdx.graphics.getDeltaTime() );
+        }
     }
+
+
 
     float centerX, centerY;
     Vector3 touchPoint = new Vector3();
@@ -223,7 +229,8 @@ public class Player extends Actor implements Entity {
         batch.draw( renderTexture, sub.x < 0  ? getX() + 5f + getWidth() : getX() - 5f, getY() - 5f, sub.x < 0  ? - (getWidth() + 10f) : getWidth() + 10f, getHeight() + 10f );
 
         if( !takenHit ) {
-            recoil = fire ? random.nextFloat() * 4f : 0;
+            SpriteShake.rumble( 2f, 2f );
+            recoil = fire ? SpriteShake.getPos().x : 0;
             batch.draw( weaponRegion, centerX + MathUtils.lerp( 0, recoil, Gdx.graphics.getDeltaTime() * 100f ), centerY - 11f, 0, 0, weaponRegion.getRegionWidth(), sub.x < 0 ? - weaponRegion.getRegionHeight() : weaponRegion.getRegionHeight(), .4f, .4f, angleDeg );
         }
 
@@ -251,7 +258,7 @@ public class Player extends Actor implements Entity {
 
     void shoot() {
         trigger_time = time;
-            gunSound.play( .3f, random.nextFloat() * 1f + .5f, 0f );
+            gunSound.play( .3f * Static.sfxVol, random.nextFloat() * 1f + .5f, 0f );
             tempBullet = new Bullet( new Vector2( centerX, centerY ).add( new Vector2( sub ).nor().scl( 30f ) ), touchPointV2, world );
             getStage().addActor( tempBullet );
             fire = true;

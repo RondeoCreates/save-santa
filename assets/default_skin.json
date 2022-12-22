@@ -48,6 +48,13 @@ LabelStyle: {
 		fontColor: RGBA_255_255_255_255
 	}
 }
+SliderStyle: {
+	default-horizontal: {
+		knobDown: button_clicked
+		background: slider-horizontal
+		knob: button_normal
+	}
+}
 TextButtonStyle: {
 	default: {
 		font: caviardreams

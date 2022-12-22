@@ -131,7 +131,7 @@ public class Enemy extends Actor implements Entity {
         if( life <= 0 ) {
             if( !isDead ) {
                 hitSound.stop();
-                dieSound.play( .2f, 1f, 0f );
+                dieSound.play( .2f * Static.sfxVol, 1f, 0f );
             }
             life = 0;
             isDead = true;
@@ -223,7 +223,7 @@ public class Enemy extends Actor implements Entity {
             return;
         
         hitSound.stop();
-        hitSound.play();
+        hitSound.play( 1f * Static.sfxVol );
         takenHit = true;
         stateTime = 0;
         life --;

@@ -355,6 +355,7 @@ public class GameScreen extends ScreenAdapter {
 
         if( !dino.end ) {
             Static.timeLeft = String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) );
+            Static.lifeLeft = (int) dino.life;
             timeLabel.setText( " " + String.valueOf( time_limit - TimeUnit.MILLISECONDS.toSeconds( System.currentTimeMillis() ) ));
             lifeLabel.setText( " x " + (int) dino.life );
             keyLabel.setText( " x " + key );
@@ -366,8 +367,9 @@ public class GameScreen extends ScreenAdapter {
                 Static.end = true;
                 //parent.setScreen( new EndScreen( parent ) );\
                 if( !scaryMusic.isPlaying() ) {
+                    scaryMusic.setVolume( Static.bgmVol );
                     scaryMusic.play();
-                    parent.bgm.setVolume( .09f );
+                    parent.bgm.setVolume( .09f * Static.bgmVol );
                 }
                 dino.end = true;
                 if( endCount < endTexts.length ) {
@@ -386,7 +388,7 @@ public class GameScreen extends ScreenAdapter {
                         endCount ++;
                     }
                 } else {
-                    parent.bgm.setVolume( .3f );
+                    parent.bgm.setVolume( .3f * Static.bgmVol );
                     parent.setScreen( new EndScreen( parent ) );
                 }
                 

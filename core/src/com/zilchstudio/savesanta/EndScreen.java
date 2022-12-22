@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class EndScreen extends ScreenAdapter {
     Table table;
@@ -34,7 +33,7 @@ public class EndScreen extends ScreenAdapter {
         stage = new Stage( new FitViewport( 800, 400 ) );
         table = new Table( skin = new Skin( Gdx.files.internal( "default_skin.json" ) ) );
 
-        gameOverLabel = new Label( "GOOD JOB!", new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );
+        gameOverLabel = new Label( (Static.lifeLeft >= Static.diffPLife[Static.difficulty] ? "Flawless Victory" : "GOOD JOB!"), new LabelStyle( skin.getFont( "F04b" ), Color.WHITE ) );
         LabelStyle style = new LabelStyle( skin.getFont( "caviardreams" ), Color.WHITE );
         String diff = "Easy";
         switch( Static.difficulty ) {
@@ -47,7 +46,7 @@ public class EndScreen extends ScreenAdapter {
             default:
                 diff = "Easy";    
         }
-        gameOverMsg = new Label( "TimeLeft: " + Static.timeLeft + "\nDifficulty: " + diff + "\nKidnap Santa again?", style );
+        gameOverMsg = new Label( "TimeLeft: " + Static.timeLeft + "\nLifeLeft: " + Static.lifeLeft + "\nDifficulty: " + diff + "\nKidnap Santa again?", style );
         gameOverMsg.setAlignment( Align.center );
 
         HorizontalGroup diffHorizontalGroup = new HorizontalGroup();
@@ -96,6 +95,20 @@ public class EndScreen extends ScreenAdapter {
 
         table.row();
         table.add( diffHorizontalGroup );
+
+        table.row();
+        table.add().height( 40f );
+
+        table.row();
+        TextButton back = new TextButton( "Back", skin );
+        table.add( back ).colspan( 2 );
+        back.addListener( new ClickListener() {
+            public void clicked( com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y ) {
+                parent.setScreen( new MenuScreen( parent ) );
+            };
+        } );
+        back.pad( 5f, 20f, 5f, 20f );
+        back.getLabel().setFontScale( .4f );
 
         table.setFillParent( true );
 
