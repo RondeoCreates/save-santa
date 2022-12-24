@@ -49,7 +49,7 @@ public class GameOverScreen extends ScreenAdapter {
             };
         } );
         easy.pad( 5f, 20f, 5f, 20f );
-        easy.getLabel().setFontScale( .4f );
+        easy.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( easy );
         
         normal = new TextButton( "Normal", skin );
@@ -60,7 +60,7 @@ public class GameOverScreen extends ScreenAdapter {
             };
         } );
         normal.pad( 5f, 20f, 5f, 20f );
-        normal.getLabel().setFontScale( .4f );
+        normal.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( normal );
 
         hard = new TextButton( "Hard" , skin );
@@ -71,7 +71,7 @@ public class GameOverScreen extends ScreenAdapter {
             };
         } );
         hard.pad( 5f, 20f, 5f, 20f );
-        hard.getLabel().setFontScale( .4f );
+        hard.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( hard );
 
         table.row();
@@ -98,7 +98,7 @@ public class GameOverScreen extends ScreenAdapter {
             };
         } );
         back.pad( 5f, 20f, 5f, 20f );
-        back.getLabel().setFontScale( .4f );
+        back.getLabel().setFontScale( .6f );
 
         table.setFillParent( true );
 

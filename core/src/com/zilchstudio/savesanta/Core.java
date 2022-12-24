@@ -35,6 +35,8 @@ public class Core extends Game {
         Gdx.graphics.setCursor( Gdx.graphics.newCursor(pm, 16, 16 ) );
         pm.dispose();
 
+        //Gdx.graphics.setFullscreenMode( Gdx.graphics.getDisplayMode() );
+
         setSound();
 
         setScreen( new MenuScreen( this ) );

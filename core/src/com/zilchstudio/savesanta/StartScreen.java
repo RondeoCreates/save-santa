@@ -37,7 +37,7 @@ public class StartScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage( new FitViewport( 800, 500 ) );
+        stage = new Stage( new FitViewport( 800, 600 ) );
 
         tut_1 = new Texture( Gdx.files.internal( "heart_live.png" ) );
         tut_2 = new Texture( Gdx.files.internal( "pig.png" ) );
@@ -52,7 +52,7 @@ public class StartScreen extends ScreenAdapter {
         LabelStyle style = new LabelStyle( skin.getFont( "caviardreams" ), Color.WHITE );
         
         message = new Label( head, style );
-        message.setFontScale( .5f );
+        message.setFontScale( .7f );
         message.setWrap( true );
         message.setWidth( 550f );
         message.setAlignment( Align.center );
@@ -67,7 +67,7 @@ public class StartScreen extends ScreenAdapter {
             };
         } );
         easy.pad( 5f, 20f, 5f, 20f );
-        easy.getLabel().setFontScale( .4f );
+        easy.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( easy );
         
         normal = new TextButton( "Normal", skin );
@@ -78,7 +78,7 @@ public class StartScreen extends ScreenAdapter {
             };
         } );
         normal.pad( 5f, 20f, 5f, 20f );
-        normal.getLabel().setFontScale( .4f );
+        normal.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( normal );
 
         hard = new TextButton( "Hard" , skin );
@@ -89,11 +89,11 @@ public class StartScreen extends ScreenAdapter {
             };
         } );
         hard.pad( 5f, 20f, 5f, 20f );
-        hard.getLabel().setFontScale( .4f );
+        hard.getLabel().setFontScale( .6f );
         diffHorizontalGroup.addActor( hard );
 
         mechanics = new Label( "Press A and D to move. Press W/SPACE to jump. LMB to Shoot.", style );
-        mechanics.setFontScale( .5f );
+        mechanics.setFontScale( .7f );
         mechanics.setWrap( true );
         mechanics.setWidth( 550f );
         mechanics.setAlignment( Align.center );
@@ -109,7 +109,7 @@ public class StartScreen extends ScreenAdapter {
         tut_1_g.pad( 3f );
         tut_1_g.addActor( new Image( tut_1 ) );
         tut_1_lbl = new Label( " You will be given [n] lives and [n] minutes to save Santa." , style );
-        tut_1_lbl.setFontScale( .4f );
+        tut_1_lbl.setFontScale( .6f );
         tut_1_g.addActor( tut_1_lbl );
         table.add( tut_1_g );
 
@@ -118,7 +118,7 @@ public class StartScreen extends ScreenAdapter {
         tut_2_g.pad( 3f );
         tut_2_g.addActor( new Image( tut_2 ) );
         tut_2_lbl = new Label( " Piggy orcs are bad, kill them all." , style );
-        tut_2_lbl.setFontScale( .4f );
+        tut_2_lbl.setFontScale( .6f );
         tut_2_g.addActor( tut_2_lbl );
         table.add( tut_2_g );
 
@@ -127,7 +127,7 @@ public class StartScreen extends ScreenAdapter {
         tut_3_g.pad( 3f );
         tut_3_g.addActor( new Image( tut_3 ) );
         tut_3_lbl = new Label( " Destroy their barracks to disable them from spawning over time." , style );
-        tut_3_lbl.setFontScale( .4f );
+        tut_3_lbl.setFontScale( .6f );
         tut_3_g.addActor( tut_3_lbl );
         table.add( tut_3_g );
 
@@ -136,7 +136,7 @@ public class StartScreen extends ScreenAdapter {
         tut_4_g.pad( 3f );
         tut_4_g.addActor( new Image( tut_4 ) );
         tut_4_lbl = new Label( " Destroy all the barracks to obtain the key to open Santa's cage." , style );
-        tut_4_lbl.setFontScale( .4f );
+        tut_4_lbl.setFontScale( .6f );
         tut_4_g.addActor( tut_4_lbl );
         table.add( tut_4_g );
 
@@ -160,7 +160,7 @@ public class StartScreen extends ScreenAdapter {
             };
         } );
         back.pad( 5f, 20f, 5f, 20f );
-        back.getLabel().setFontScale( .4f );
+        back.getLabel().setFontScale( .6f );
 
         table.setFillParent( true );
 

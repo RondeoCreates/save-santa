@@ -42,7 +42,7 @@ public class MenuScreen extends ScreenAdapter {
         exit.pad( 5f, 20f, 5f, 20f );
 
         VerticalGroup vGroup = new VerticalGroup();
-        vGroup.space( 5f );
+        vGroup.space( 7f );
 
 
         table.row();
@@ -54,21 +54,21 @@ public class MenuScreen extends ScreenAdapter {
                 parent.setScreen( new StartScreen( parent ) );
             }
         } );
-        startGame.getLabel().setFontScale( .4f );
+        startGame.getLabel().setFontScale( .6f );
 
         settings.addListener( new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 parent.setScreen( new SettingScreen( parent ) );
             };
         } );
-        settings.getLabel().setFontScale( .4f );
+        settings.getLabel().setFontScale( .6f );
 
         exit.addListener( new ClickListener() {
             public void clicked( InputEvent event, float x, float y ) {
                 Gdx.app.exit();
             };
         } );
-        exit.getLabel().setFontScale( .4f );
+        exit.getLabel().setFontScale( .6f );
 
         vGroup.addActor( startGame );
         vGroup.addActor( settings );

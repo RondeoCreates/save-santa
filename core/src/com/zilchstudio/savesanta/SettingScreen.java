@@ -91,7 +91,7 @@ public class SettingScreen extends ScreenAdapter {
             };
         } );
         back.pad( 5f, 20f, 5f, 20f );
-        back.getLabel().setFontScale( .4f );
+        back.getLabel().setFontScale( .6f );
     }
 
     @Override
