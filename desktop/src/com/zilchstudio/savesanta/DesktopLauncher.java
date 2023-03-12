@@ -8,8 +8,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setWindowSizeLimits( 1200, 600, 99999, 99999 );
+		config.setWindowSizeLimits( 1600, 900, 99999, 99999 );
 		config.setTitle("Save Santa");
+		Static.mobileDevice = true;
 		new Lwjgl3Application(new Core(), config);
 	}
 }
